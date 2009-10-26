@@ -9,19 +9,21 @@ import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.wave.api.AbstractRobotServlet;
+import com.google.wave.api.ElementType;
 import com.google.wave.api.Event;
 import com.google.wave.api.EventType;
+import com.google.wave.api.FormElement;
 import com.google.wave.api.RobotMessageBundle;
 import com.google.wave.api.TextView;
 import com.google.wave.api.Wavelet;
 
 public class DiceRobotServlet extends AbstractRobotServlet
 {
+	private static final String DEFAULT_ROLLING_METHOD_DATA_KEY = "default-rolling-method";
 	private static final Pattern DIE_ROLL_PATTERN = Pattern.compile("\\[(?:(\\w+)\\:)?([^\\]=]+)\\]");
 	private static final Map<String, IRollingMethod> ROLLING_METHODS = new HashMap<String, IRollingMethod>();
 	
@@ -31,8 +33,6 @@ public class DiceRobotServlet extends AbstractRobotServlet
 		registerRollingMethod("sum", new AdditiveRoll(factory));
 		registerRollingMethod("ditv", new DogsInTheVineyard(factory));
 	}
-	
-	private final String defaultMethod = "sum";
 	
 	private static void registerRollingMethod(final String id, final IRollingMethod method)
 	{
@@ -55,27 +55,26 @@ public class DiceRobotServlet extends AbstractRobotServlet
 	private void onSelfAdded(final Wavelet wavelet)
 	{
 		final TextView document = wavelet.appendBlip().getDocument();
-		document.append("Dice Robot online.");
+		document.append("Dice Robot online.\n");
+		document.append("[default:sum]");
 		
-		Logger.getAnonymousLogger().warning("DRS online. " + this);
-		
-		// Commented until a way to pre-select option is available
+		// final FormElement group = new FormElement(ElementType.RADIO_BUTTON_GROUP, "dm");
+		// document.getFormView().append(group);
 		//		
-		// document.append("\nSelect default rolling method:");
+		// appendOption(document, "dm", "sum", "Simple roll");
+		// appendOption(document, "dm", "ditv", "Dogs in the Vineyard");
+		// appendOption(document, "dm", "ore", "One Roll Engine");
+		// appendOption(document, "dm", "nwod", "New World of Darkness");
+		// appendOption(document, "dm", "exl", "Exalted");
 		//		
-		// document.getFormView().append(new
-		// FormElement(ElementType.RADIO_BUTTON_GROUP, "default"));
-		//		
-		// for (final String code : ROLLING_METHODS.keySet())
-		// {
-		// document.append("\n");
-		//			
-		// final FormElement radio = new FormElement(ElementType.RADIO_BUTTON, "", "default", "", code);
-		// if (code.equals(this.defaultMethod)) radio.setProperty("checked", "checked");
-		//			
-		// document.getFormView().append(radio);
-		// document.getFormView().append(new FormElement(ElementType.LABEL, code, "Option [" + code + "]"));
-		// }
+		// group.setDefaultValue("sum");
+	}
+	
+	public static void appendOption(final TextView view, final String group, final String id, final String label)
+	{
+		view.append("\n");
+		view.getFormView().append(new FormElement(ElementType.RADIO_BUTTON, "", group, "", id));
+		view.getFormView().append(new FormElement(ElementType.LABEL, "", id, "", label));
 	}
 	
 	private void onDocumentChanged(final Event event)
@@ -88,27 +87,45 @@ public class DiceRobotServlet extends AbstractRobotServlet
 			final String code = matcher.group(1);
 			final String expression = matcher.group(2);
 			
-			if ("default".equals(code))
-			{
-				if (ROLLING_METHODS.keySet().contains(expression))
-				{
-					
-				}
-			}
-			
-			final IRollingMethod method = ROLLING_METHODS.get(code == null ? this.defaultMethod : code);
 			final IFormattedBufferedOutput output = new DocumentWriter(document, matcher.end(2)).append(" = ");
 			
-			if (method != null)
+			if ("default".equals(code))
 			{
-				method.writeResult(expression, output);
+				setDefaultMethod(event, expression, output);
 			}
 			else
 			{
-				output.append("unknown method \"" + code + "\"", "style/color", "red");
+				rollDice(event, code, expression, output);
 			}
 			
 			output.flush();
+		}
+	}
+	
+	private void setDefaultMethod(final Event event, final String expression, final IFormattedBufferedOutput output)
+	{
+		if (ROLLING_METHODS.keySet().contains(expression))
+		{
+			event.getWavelet().setDataDocument(DEFAULT_ROLLING_METHOD_DATA_KEY, expression);
+			output.append("default method set");
+		}
+		else
+		{
+			output.append("unknown method \"" + expression + "\"", "style/color", "red");
+		}
+	}
+	
+	private void rollDice(final Event event, final String code, final String roll, final IFormattedBufferedOutput output)
+	{
+		final String resolvedCode = (code == null) ? event.getWavelet().getDataDocument(DEFAULT_ROLLING_METHOD_DATA_KEY) : code;
+		
+		if (ROLLING_METHODS.containsKey(resolvedCode))
+		{
+			ROLLING_METHODS.get(resolvedCode).writeResult(roll, output);
+		}
+		else
+		{
+			output.append("unknown method \"" + code + "\"", "style/color", "red");
 		}
 	}
 }
