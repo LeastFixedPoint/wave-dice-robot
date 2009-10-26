@@ -9,6 +9,7 @@ import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,6 +57,8 @@ public class DiceRobotServlet extends AbstractRobotServlet
 		final TextView document = wavelet.appendBlip().getDocument();
 		document.append("Dice Robot online.");
 		
+		Logger.getAnonymousLogger().warning("DRS online. " + this);
+		
 		// Commented until a way to pre-select option is available
 		//		
 		// document.append("\nSelect default rolling method:");
@@ -78,21 +81,27 @@ public class DiceRobotServlet extends AbstractRobotServlet
 	private void onDocumentChanged(final Event event)
 	{
 		final TextView document = event.getBlip().getDocument();
-		final String text = document.getText();
-		
-		final Matcher matcher = DIE_ROLL_PATTERN.matcher(text);
+		final Matcher matcher = DIE_ROLL_PATTERN.matcher(document.getText());
 		
 		while (matcher.find())
 		{
 			final String code = matcher.group(1);
-			final String roll = matcher.group(2);
+			final String expression = matcher.group(2);
+			
+			if ("default".equals(code))
+			{
+				if (ROLLING_METHODS.keySet().contains(expression))
+				{
+					
+				}
+			}
 			
 			final IRollingMethod method = ROLLING_METHODS.get(code == null ? this.defaultMethod : code);
 			final IFormattedBufferedOutput output = new DocumentWriter(document, matcher.end(2)).append(" = ");
 			
 			if (method != null)
 			{
-				method.writeResult(roll, output);
+				method.writeResult(expression, output);
 			}
 			else
 			{
