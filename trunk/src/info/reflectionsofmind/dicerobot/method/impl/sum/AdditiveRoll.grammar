@@ -1,0 +1,6 @@
+expression ::= ( token | plus | minus )
+token ::= ( roll | number )
+number ::= ( %digit% { %digit% } )
+roll ::= ( number ("d" | "к") number )
+plus ::= ( token "+" expression )
+minus ::= ( token "-" expression )
