@@ -1,13 +1,17 @@
-#summary One-sentence summary of this page.
+#summary Developer notes and implementation details
 
-= Introduction =
+= State management =
 
-Add your content here.
+Default dice rolling method is stored as a DataDocument attached to the wavelet.
 
+When user clicks on configuration gadget, it sets a property to itself. This fires a DOCUMENT_CHANGED event. Robot captures it, reads that gadget property and sets a new DataDocument to wavelet. 
 
-= Details =
+When a roll is made, robot retrieves that DataDocument from wave and uses it for rolling.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Framework =
+
+To be done...
+
+= Extensibility =
+
+To be done...
