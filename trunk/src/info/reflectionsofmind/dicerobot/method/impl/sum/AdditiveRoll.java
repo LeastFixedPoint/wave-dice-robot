@@ -164,4 +164,9 @@ public class AdditiveRoll implements IRollingMethod
 			e.printStackTrace();
 		}
 	}
+	
+	public String getName()
+	{
+		return "Sum of all rolls";
+	}
 }

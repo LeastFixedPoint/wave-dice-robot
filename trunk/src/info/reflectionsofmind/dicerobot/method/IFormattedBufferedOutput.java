@@ -1,5 +1,6 @@
 package info.reflectionsofmind.dicerobot.method;
 
+
 public interface IFormattedBufferedOutput
 {
 	IFormattedBufferedOutput append(Object object);

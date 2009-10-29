@@ -7,7 +7,7 @@ import com.google.wave.api.Annotation;
 import com.google.wave.api.Range;
 import com.google.wave.api.TextView;
 
-public final class DocumentWriter implements IFormattedBufferedOutput
+public class DocumentWriter implements IFormattedBufferedOutput
 {
 	private final TextView document;
 	private final int start;
@@ -22,11 +22,17 @@ public final class DocumentWriter implements IFormattedBufferedOutput
 		this.position = position;
 	}
 	
+	public DocumentWriter(final TextView document)
+	{
+		this(document, 0);
+	}
+	
 	public DocumentWriter append(final Object object)
 	{
 		final String string = object.toString();
 		this.builder.append(string);
 		this.position += string.length();
+		
 		return this;
 	}
 	

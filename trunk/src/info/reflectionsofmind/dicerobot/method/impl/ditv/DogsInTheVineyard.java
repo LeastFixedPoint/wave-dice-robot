@@ -54,4 +54,9 @@ public class DogsInTheVineyard implements IRollingMethod
 			output.append(result.dieSize.toString(), "style/fontSize", "0.66em");
 		}
 	}
+	
+	public String getName()
+	{
+		return "Dogs in the Vineyard";
+	}
 }
