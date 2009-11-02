@@ -40,7 +40,7 @@ public class AdditiveRoll implements IRollingMethod
 		final ResultTree result = results.get(0);
 		final NamedNode expression = (NamedNode) result.root;
 		
-		final RollInProgress roll = new RollInProgress(output).appendExpression(expression, +1);
+		final RollInProgress roll = new RollInProgress(output).appendExpression(expression);
 		
 		if (roll.getCount() > 1)
 		{
@@ -58,6 +58,11 @@ public class AdditiveRoll implements IRollingMethod
 		public RollInProgress(final IFormattedBufferedOutput output)
 		{
 			this.output = output;
+		}
+		
+		private RollInProgress appendExpression(final NamedNode expression)
+		{
+			return appendExpression(expression, +1);
 		}
 		
 		private RollInProgress appendExpression(final NamedNode expression, final int multiplier)
@@ -96,8 +101,9 @@ public class AdditiveRoll implements IRollingMethod
 			}
 			else if (numberRoll.is("roll"))
 			{
-				final int count = Integer.parseInt(numberRoll.get(0).getText());
-				final int dieSize = Integer.parseInt(numberRoll.get(1).getText());
+				final int numChildren = numberRoll.getNamedChildren().size();
+				final int count = numChildren == 1 ? 1 : Integer.parseInt(numberRoll.get(0).getText());
+				final int dieSize = Integer.parseInt(numberRoll.get(numChildren - 1).getText());
 				
 				int sum = 0;
 				for (int i = 0; i < count; i++)
