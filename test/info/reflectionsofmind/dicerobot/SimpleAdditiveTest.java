@@ -1,68 +1,99 @@
 package info.reflectionsofmind.dicerobot;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import info.reflectionsofmind.dicerobot.diceroller.IDieRoller;
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
 import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
 
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
+/** Test of {@link AdditiveRoll}. */
 public class SimpleAdditiveTest
 {
+	private MockOutput output;
+	
 	public IDieRollerFactory mockDieRollerFactory(final Integer first, final Integer... answers)
 	{
-		final IDieRoller roller = Mockito.mock(IDieRoller.class);
-		Mockito.when(roller.roll(Mockito.anyInt())).thenReturn(first, answers);
+		final IDieRoller roller = mock(IDieRoller.class);
+		when(roller.roll(anyInt())).thenReturn(first, answers);
 		
-		final IDieRollerFactory factory = Mockito.mock(IDieRollerFactory.class);
-		Mockito.when(factory.createDieRoller()).thenReturn(roller);
+		final IDieRollerFactory factory = mock(IDieRollerFactory.class);
+		when(factory.createDieRoller()).thenReturn(roller);
 		
 		return factory;
+	}
+	
+	@Before
+	public void setUp()
+	{
+		this.output = new MockOutput();
 	}
 	
 	@Test
 	public void testSingleDieRoll()
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3));
-		final MockOutput output = new MockOutput();
-		method.writeResult("3d6", output);
-		Assert.assertEquals("10", output.getString());
+		method.writeResult("3d6", this.output);
+		assertEquals("10", this.output.getString());
 	}
 	
 	@Test
 	public void testSingleNumber()
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3));
-		final MockOutput output = new MockOutput();
-		method.writeResult("5", output);
-		Assert.assertEquals("5", output.getString());
+		method.writeResult("5", this.output);
+		assertEquals("5", this.output.getString());
 	}
 	
 	@Test
 	public void testAddition()
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3));
-		final MockOutput output = new MockOutput();
-		method.writeResult("3d6+3", output);
-		Assert.assertEquals("10 + 3 = 13", output.getString());
+		method.writeResult("3d6+3", this.output);
+		assertEquals("10 + 3 = 13", this.output.getString());
 	}
 	
 	@Test
 	public void testSubtraction()
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3));
-		final MockOutput output = new MockOutput();
-		method.writeResult("3d6-3", output);
-		Assert.assertEquals("10 - 3 = 7", output.getString());
+		method.writeResult("3d6-3", this.output);
+		assertEquals("10 - 3 = 7", this.output.getString());
 	}
 	
 	@Test
 	public void testBigExpression()
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3, 2, 3, 1, 3));
-		final MockOutput output = new MockOutput();
-		method.writeResult("3d6-3+2d3-4-5+2d4", output);
-		Assert.assertEquals("10 - 3 + 5 - 4 - 5 + 4 = 7", output.getString());
+		method.writeResult("3d6-3+2d3-4-5+2d4", this.output);
+		assertEquals("10 - 3 + 5 - 4 - 5 + 4 = 7", this.output.getString());
 	}
+	
+	@Test
+	public void testDieRollWithImplicitNumberOfDice()
+	{
+		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(15));
+		method.writeResult("d20", this.output);
+		assertEquals("15", this.output.getString());
+	}
+	
+	// @Test
+	// public void testFailureOnZeroDieSize()
+	// {
+	// final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 3, 6));
+	// method.writeResult("1d0", this.output);
+	// assertEquals("invalid roll", this.output.getString());
+	// }
+	//	
+	// @Test
+	// public void testFailureOnZeroDieCount()
+	// {
+	// final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 3, 6));
+	// method.writeResult("0d1", this.output);
+	// assertEquals("invalid roll", this.output.getString());
+	// }
 }
