@@ -34,7 +34,7 @@ public class SimpleAdditiveTest
 	}
 	
 	@Test
-	public void testSingleDieRoll()
+	public void testSingleDieRoll() throws Exception
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3));
 		method.writeResult("3d6", this.output);
@@ -42,7 +42,7 @@ public class SimpleAdditiveTest
 	}
 	
 	@Test
-	public void testSingleNumber()
+	public void testSingleNumber() throws Exception
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3));
 		method.writeResult("5", this.output);
@@ -50,7 +50,7 @@ public class SimpleAdditiveTest
 	}
 	
 	@Test
-	public void testAddition()
+	public void testAddition() throws Exception
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3));
 		method.writeResult("3d6+3", this.output);
@@ -58,7 +58,7 @@ public class SimpleAdditiveTest
 	}
 	
 	@Test
-	public void testSubtraction()
+	public void testSubtraction() throws Exception
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3));
 		method.writeResult("3d6-3", this.output);
@@ -66,7 +66,7 @@ public class SimpleAdditiveTest
 	}
 	
 	@Test
-	public void testBigExpression()
+	public void testBigExpression() throws Exception
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(1, 6, 3, 2, 3, 1, 3));
 		method.writeResult("3d6-3+2d3-4-5+2d4", this.output);
@@ -74,7 +74,7 @@ public class SimpleAdditiveTest
 	}
 	
 	@Test
-	public void testDieRollWithImplicitNumberOfDice()
+	public void testDieRollWithImplicitNumberOfDice() throws Exception
 	{
 		final AdditiveRoll method = new AdditiveRoll(mockDieRollerFactory(15));
 		method.writeResult("d20", this.output);

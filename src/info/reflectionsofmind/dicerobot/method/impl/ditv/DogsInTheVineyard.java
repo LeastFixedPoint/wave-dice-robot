@@ -31,7 +31,7 @@ public class DogsInTheVineyard implements IRollingMethod
 		
 		if (!matcher.matches())
 		{
-			output.append("invalid roll", "style/color", "red");
+			output.append("invalid roll").with("style/color", "red");
 			return;
 		}
 		
@@ -50,8 +50,8 @@ public class DogsInTheVineyard implements IRollingMethod
 		{
 			final DieRollResult result = results.get(i);
 			if (i > 0) output.append(" ");
-			output.append(result.result.toString(), "style/fontFamily", "arial black, sans serif");
-			output.append(result.dieSize.toString(), "style/fontSize", "0.66em");
+			output.append(result.result.toString()).with("style/fontFamily", "arial black, sans serif");
+			output.append(result.dieSize.toString()).with("style/fontSize", "0.66em");
 		}
 	}
 	

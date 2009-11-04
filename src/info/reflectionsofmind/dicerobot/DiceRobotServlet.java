@@ -1,7 +1,5 @@
 package info.reflectionsofmind.dicerobot;
 
-import info.reflectionsofmind.dicerobot.event.AbstractDiceRobotEvent;
-
 import com.google.wave.api.AbstractRobotServlet;
 import com.google.wave.api.RobotMessageBundle;
 
@@ -24,9 +22,6 @@ public class DiceRobotServlet extends AbstractRobotServlet
 	@Override
 	public void processEvents(final RobotMessageBundle bundle)
 	{
-		for (final AbstractDiceRobotEvent event : this.processor.convert(bundle))
-		{
-			event.dispatch(this.robot);
-		}
+		this.processor.convert(bundle).dispatchAll(this.robot);
 	}
 }

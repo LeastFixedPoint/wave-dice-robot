@@ -5,7 +5,7 @@ import info.reflectionsofmind.dicerobot.wrapper.DiceRobotWavelet;
 
 import com.google.wave.api.Event;
 
-public abstract class AbstractDiceRobotEvent
+public abstract class AbstractDiceRobotEvent implements IDiceRollerEvent
 {
 	private final Event event;
 	

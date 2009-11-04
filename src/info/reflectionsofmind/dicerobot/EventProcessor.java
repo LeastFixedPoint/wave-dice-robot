@@ -1,6 +1,5 @@
 package info.reflectionsofmind.dicerobot;
 
-import info.reflectionsofmind.dicerobot.event.AbstractDiceRobotEvent;
 import info.reflectionsofmind.dicerobot.event.RollEvent;
 import info.reflectionsofmind.dicerobot.event.SelfAddedEvent;
 import info.reflectionsofmind.dicerobot.event.SetDefaultEvent;
@@ -9,17 +8,14 @@ import info.reflectionsofmind.dicerobot.wrapper.DiceRobotGadget;
 import info.reflectionsofmind.dicerobot.wrapper.DiceRobotHomeBlip;
 import info.reflectionsofmind.dicerobot.wrapper.RollRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.wave.api.Event;
 import com.google.wave.api.RobotMessageBundle;
 
 public class EventProcessor
 {
-	public List<AbstractDiceRobotEvent> convert(final RobotMessageBundle bundle)
+	public EventList convert(final RobotMessageBundle bundle)
 	{
-		final List<AbstractDiceRobotEvent> events = new ArrayList<AbstractDiceRobotEvent>();
+		final EventList events = new EventList();
 		
 		if (bundle.wasSelfAdded())
 		{

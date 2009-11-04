@@ -18,6 +18,12 @@ public class MockOutput implements IFormattedBufferedOutput
 		return this;
 	}
 	
+	@Override
+	public IFormattedBufferedOutput with(final String annotation, final String value)
+	{
+		return this;
+	}
+	
 	public void flush()
 	{
 	}

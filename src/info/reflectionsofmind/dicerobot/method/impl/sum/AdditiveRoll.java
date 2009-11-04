@@ -2,8 +2,11 @@ package info.reflectionsofmind.dicerobot.method.impl.sum;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRoller;
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
+import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
+import info.reflectionsofmind.dicerobot.exception.InvalidRollFormatException;
 import info.reflectionsofmind.dicerobot.method.IFormattedBufferedOutput;
 import info.reflectionsofmind.dicerobot.method.IRollingMethod;
+import info.reflectionsofmind.dicerobot.method.WrappingWriter;
 import info.reflectionsofmind.parser.Grammar;
 import info.reflectionsofmind.parser.Matchers;
 import info.reflectionsofmind.parser.ResultTree;
@@ -27,14 +30,13 @@ public class AdditiveRoll implements IRollingMethod
 		this.factory = factory;
 	}
 	
-	public void writeResult(final String input, final IFormattedBufferedOutput output)
+	public void writeResult(final String input, final IFormattedBufferedOutput output) throws CannotMakeRollException
 	{
 		final List<ResultTree> results = Matchers.fullMatch(GRAMMAR, input);
 		
 		if (results.isEmpty())
 		{
-			output.append("invalid roll", "style/color", "red");
-			return;
+			throw new InvalidRollFormatException();
 		}
 		
 		final ResultTree result = results.get(0);
@@ -44,20 +46,21 @@ public class AdditiveRoll implements IRollingMethod
 		
 		if (roll.getCount() > 1)
 		{
-			output.append(" = ").append(roll.getTotal());
+			roll.append(" = ").append(roll.getTotal());
 		}
+		
+		roll.flush();
 	}
 	
-	private final class RollInProgress implements IFormattedBufferedOutput
+	private final class RollInProgress extends WrappingWriter
 	{
 		private final IDieRoller roller = AdditiveRoll.this.factory.createDieRoller();
-		private final IFormattedBufferedOutput output;
 		private int total = 0;
 		private int count = 0;
 		
 		public RollInProgress(final IFormattedBufferedOutput output)
 		{
-			this.output = output;
+			super(output);
 		}
 		
 		private RollInProgress appendExpression(final NamedNode expression)
@@ -122,21 +125,11 @@ public class AdditiveRoll implements IRollingMethod
 			return this;
 		}
 		
-		public RollInProgress append(final Object object, final String annotation, final String value)
-		{
-			this.output.append(object, annotation, value);
-			return this;
-		}
-		
+		@Override
 		public RollInProgress append(final Object object)
 		{
-			this.output.append(object);
+			super.append(object);
 			return this;
-		}
-		
-		public void flush()
-		{
-			this.output.flush();
 		}
 		
 		public int getTotal()
