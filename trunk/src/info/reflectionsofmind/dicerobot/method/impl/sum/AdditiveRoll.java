@@ -63,12 +63,12 @@ public class AdditiveRoll implements IRollingMethod
 			super(output);
 		}
 		
-		private RollInProgress appendExpression(final NamedNode expression)
+		private RollInProgress appendExpression(final NamedNode expression) throws CannotMakeRollException
 		{
 			return appendExpression(expression, +1);
 		}
 		
-		private RollInProgress appendExpression(final NamedNode expression, final int multiplier)
+		private RollInProgress appendExpression(final NamedNode expression, final int multiplier) throws CannotMakeRollException
 		{
 			final NamedNode tokenPlusMinus = expression.get(0);
 			
@@ -92,7 +92,7 @@ public class AdditiveRoll implements IRollingMethod
 			return this;
 		}
 		
-		private RollInProgress appendToken(final NamedNode token, final int multiplier)
+		private RollInProgress appendToken(final NamedNode token, final int multiplier) throws CannotMakeRollException
 		{
 			final NamedNode numberRoll = token.get(0);
 			

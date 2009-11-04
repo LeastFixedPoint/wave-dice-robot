@@ -1,12 +1,14 @@
 package info.reflectionsofmind.dicerobot.diceroller;
 
+import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
+
 import java.util.Random;
 
-public final class RandomBasedDieRoller implements IDieRoller
+public class RandomBasedDieRoller implements IDieRoller
 {
 	private final Random random = new Random();
 	
-	public int roll(final int dieSize)
+	public int roll(final int dieSize) throws CannotMakeRollException
 	{
 		return this.random.nextInt(dieSize) + 1;
 	}

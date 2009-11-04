@@ -1,4 +1,4 @@
-package info.reflectionsofmind.dicerobot;
+package info.reflectionsofmind.dicerobot.method;
 
 import info.reflectionsofmind.dicerobot.method.IFormattedBufferedOutput;
 

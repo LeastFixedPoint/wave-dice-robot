@@ -1,4 +1,4 @@
-package info.reflectionsofmind.dicerobot;
+package info.reflectionsofmind.dicerobot.method;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -16,7 +16,7 @@ public class SimpleAdditiveTest
 {
 	private MockOutput output;
 	
-	public IDieRollerFactory mockDieRollerFactory(final Integer first, final Integer... answers)
+	public IDieRollerFactory mockDieRollerFactory(final Integer first, final Integer... answers) throws Exception
 	{
 		final IDieRoller roller = mock(IDieRoller.class);
 		when(roller.roll(anyInt())).thenReturn(first, answers);
