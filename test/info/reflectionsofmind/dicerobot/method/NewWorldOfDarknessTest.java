@@ -1,4 +1,4 @@
-package info.reflectionsofmind.dicerobot;
+package info.reflectionsofmind.dicerobot.method;
 
 import static info.reflectionsofmind.dicerobot.TestingUtil.assertRoll;
 import static info.reflectionsofmind.dicerobot.TestingUtil.mockDieRollerFactory;

@@ -55,4 +55,9 @@ public class DocumentWriter implements IFormattedBufferedOutput
 			this.document.setAnnotation(annotation.getRange(), annotation.getName(), annotation.getValue());
 		}
 	}
+	
+	protected int getOutputLength()
+	{
+		return this.position - this.start;
+	}
 }

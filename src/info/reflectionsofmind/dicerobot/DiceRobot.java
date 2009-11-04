@@ -1,12 +1,13 @@
 package info.reflectionsofmind.dicerobot;
 
-import info.reflectionsofmind.dicerobot.diceroller.RandomBasedDieRollerFactory;
+import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
+import info.reflectionsofmind.dicerobot.diceroller.LimitedRandomBasedDieRollerFactory;
 import info.reflectionsofmind.dicerobot.event.RollEvent;
 import info.reflectionsofmind.dicerobot.event.SelfAddedEvent;
 import info.reflectionsofmind.dicerobot.event.SetDefaultEvent;
 import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
 import info.reflectionsofmind.dicerobot.exception.InvalidRollFormatException;
-import info.reflectionsofmind.dicerobot.exception.RollTooLargeException;
+import info.reflectionsofmind.dicerobot.exception.RollLimitReachedException;
 import info.reflectionsofmind.dicerobot.method.IRollingMethod;
 import info.reflectionsofmind.dicerobot.method.impl.ditv.DogsInTheVineyard;
 import info.reflectionsofmind.dicerobot.method.impl.nwod.NewWorldOfDarkness;
@@ -25,7 +26,7 @@ public class DiceRobot
 	
 	static
 	{
-		final RandomBasedDieRollerFactory factory = new RandomBasedDieRollerFactory();
+		final IDieRollerFactory factory = new LimitedRandomBasedDieRollerFactory(10000);
 		ROLLING_METHODS.put("sum", new AdditiveRoll(factory));
 		ROLLING_METHODS.put("ditv", new DogsInTheVineyard(factory));
 		ROLLING_METHODS.put("nwod", new NewWorldOfDarkness(factory));
@@ -77,9 +78,9 @@ public class DiceRobot
 			{
 				request.getOutput().append("invalid roll format").with("style/color", "red");
 			}
-			catch (final RollTooLargeException e)
+			catch (final RollLimitReachedException e)
 			{
-				request.getOutput().append("you ask for too much").with("style/color", "red");
+				request.getOutput().append("you are asking for too much: rolls > 10000").with("style/color", "red");
 			}
 			catch (final CannotMakeRollException e)
 			{
