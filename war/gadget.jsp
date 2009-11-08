@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ page isELIgnored="false" %>
 <%@ page import=
-	"info.reflectionsofmind.dicerobot.wrapper.*, 
-	info.reflectionsofmind.dicerobot.method.*, 
+	"info.reflectionsofmind.dicerobot.method.impl.*, 
+	info.reflectionsofmind.dicerobot.method.*,
 	info.reflectionsofmind.dicerobot.*, 
 	java.util.*" 
 %>
@@ -38,7 +38,7 @@
 		
 					<table style="font-size: small;">
 						<%
-							for (Map.Entry<String, IRollingMethod> entry : DiceRobot.ROLLING_METHODS.entrySet()) 
+							for (Map.Entry<String, IRollingMethod> entry : new DefaultMethodFactory().getMethods().entrySet()) 
 							{
 								String code = entry.getKey();
 								String name = entry.getValue().getName();
@@ -57,7 +57,7 @@
 				</p>
 				
 				<script type="text/javascript"> 
-					var drmKey = "<%= DiceRobotGadget.DEFAULT_ROLLING_METHOD_FIELD %>";
+					var drmKey = "<%= DiceRobotServlet.GADGET_DEFAULT_CONFIG_KEY %>";
 					
 					function getCheckedMethod() {
 						return $("input[@name='defaultMethod']:checked").val();

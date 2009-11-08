@@ -1,6 +1,6 @@
 package info.reflectionsofmind.dicerobot.method;
 
-import info.reflectionsofmind.dicerobot.method.IFormattedBufferedOutput;
+import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
 
 public class MockOutput implements IFormattedBufferedOutput
 {
