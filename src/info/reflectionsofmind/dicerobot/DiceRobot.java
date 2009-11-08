@@ -5,7 +5,7 @@ import info.reflectionsofmind.dicerobot.diceroller.LimitedRandomBasedDieRollerFa
 import info.reflectionsofmind.dicerobot.event.RollEvent;
 import info.reflectionsofmind.dicerobot.event.SelfAddedEvent;
 import info.reflectionsofmind.dicerobot.event.SetDefaultEvent;
-import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
+import info.reflectionsofmind.dicerobot.exception.RollingPipelineException;
 import info.reflectionsofmind.dicerobot.exception.InvalidRollFormatException;
 import info.reflectionsofmind.dicerobot.exception.RollLimitReachedException;
 import info.reflectionsofmind.dicerobot.method.IRollingMethod;
@@ -82,7 +82,7 @@ public class DiceRobot
 			{
 				request.getOutput().append("you are asking for too much: rolls > 10000").with("style/color", "red");
 			}
-			catch (final CannotMakeRollException e)
+			catch (final RollingPipelineException e)
 			{
 				request.getOutput().append("unknown error").with("style/color", "red");
 			}

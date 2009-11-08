@@ -1,6 +1,6 @@
 package info.reflectionsofmind.dicerobot.exception;
 
-public class RollTooLargeException extends CannotMakeRollException
+public class RollTooLargeException extends RollingPipelineException
 {
 	
 }

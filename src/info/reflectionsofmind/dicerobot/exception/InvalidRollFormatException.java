@@ -1,6 +1,8 @@
 package info.reflectionsofmind.dicerobot.exception;
 
-public class InvalidRollFormatException extends CannotMakeRollException
+import info.reflectionsofmind.dicerobot.method.impl.ditv.CannotParseRollException;
+
+public class InvalidRollFormatException extends CannotParseRollException
 {
 	
 }

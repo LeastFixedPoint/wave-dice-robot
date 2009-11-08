@@ -1,22 +1,22 @@
 package info.reflectionsofmind.dicerobot.method.impl.ditv;
 
-import info.reflectionsofmind.dicerobot.method.IRollInput;
-import info.reflectionsofmind.dicerobot.method.impl.RollRequest;
+import info.reflectionsofmind.dicerobot.method.IRollRequest;
+import info.reflectionsofmind.dicerobot.method.impl.Roll;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Request implements IRollInput
+public final class Request implements IRollRequest
 {
-	private final List<RollRequest> rolls = new ArrayList<RollRequest>();
+	private final List<Roll> rolls = new ArrayList<Roll>();
 	
 	public Request add(final int count, final int dieSize)
 	{
-		this.rolls.add(new RollRequest(count, dieSize));
+		this.rolls.add(new Roll(count, dieSize));
 		return this;
 	}
 	
-	public List<RollRequest> getRollRequests()
+	public List<Roll> getRolls()
 	{
 		return this.rolls;
 	}

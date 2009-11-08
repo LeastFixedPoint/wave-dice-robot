@@ -1,6 +1,6 @@
 package info.reflectionsofmind.dicerobot.method;
 
-public interface IRollOutput
+public interface IRollRequest
 {
 	
 }

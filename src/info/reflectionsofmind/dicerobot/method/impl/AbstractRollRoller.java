@@ -2,19 +2,17 @@ package info.reflectionsofmind.dicerobot.method.impl;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRoller;
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
-import info.reflectionsofmind.dicerobot.method.IRollInput;
-import info.reflectionsofmind.dicerobot.method.IRollOutput;
+import info.reflectionsofmind.dicerobot.method.IRollRequest;
+import info.reflectionsofmind.dicerobot.method.IRollResult;
 import info.reflectionsofmind.dicerobot.method.IRollRoller;
 
-public abstract class AbstractRollRoller<TRollInput extends IRollInput, TRollOutput extends IRollOutput> implements IRollRoller<TRollInput, TRollOutput>
+public abstract class AbstractRollRoller<TRollRequest extends IRollRequest, TRollOutput extends IRollResult<TRollRequest>> implements IRollRoller<TRollRequest, TRollOutput>
 {
-	private IDieRollerFactory factory;
+	private final IDieRollerFactory factory;
 	
-	@Override
-	public IRollRoller<TRollInput, TRollOutput> setDieRollerFactory(final IDieRollerFactory factory)
+	public AbstractRollRoller(final IDieRollerFactory factory)
 	{
 		this.factory = factory;
-		return this;
 	}
 	
 	public IDieRoller createDieRoller()
