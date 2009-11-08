@@ -1,6 +1,6 @@
 package info.reflectionsofmind.dicerobot.method;
 
-import info.reflectionsofmind.dicerobot.diceroller.CannotMakeRollException;
+import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
 
 public interface IRollRoller<TRollRequest extends IRollRequest, TRollResult extends IRollResult<TRollRequest>>
 {

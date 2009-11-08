@@ -1,18 +1,18 @@
 package info.reflectionsofmind.dicerobot.wrapper;
 
-import info.reflectionsofmind.dicerobot.method.IFormattedBufferedOutput;
+import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
 
 public class RollRequest
 {
 	private final IFormattedBufferedOutput output;
-	private final String method;
-	private final String roll;
+	private final String config;
+	private final String request;
 	
-	public RollRequest(final IFormattedBufferedOutput output, final String method, final String roll)
+	public RollRequest(final IFormattedBufferedOutput output, final String config, final String request)
 	{
 		this.output = output;
-		this.method = method;
-		this.roll = roll;
+		this.config = config;
+		this.request = request;
 	}
 	
 	public IFormattedBufferedOutput getOutput()
@@ -20,13 +20,13 @@ public class RollRequest
 		return this.output;
 	}
 	
-	public String getMethod()
+	public String getConfig()
 	{
-		return this.method;
+		return this.config;
 	}
 	
-	public String getRoll()
+	public String getRequest()
 	{
-		return this.roll;
+		return this.request;
 	}
 }

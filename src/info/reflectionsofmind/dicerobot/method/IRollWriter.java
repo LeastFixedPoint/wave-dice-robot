@@ -1,6 +1,9 @@
 package info.reflectionsofmind.dicerobot.method;
 
-public interface IRollWriter<TRollOutput extends IRollResult<?>>
+import info.reflectionsofmind.dicerobot.exception.CannotRenderRollException;
+import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
+
+public interface IRollWriter<TRollResult extends IRollResult<?>>
 {
-	void render(IFormattedBufferedOutput writer, TRollOutput output) throws CannotWriteRollException;
+	void render(IFormattedBufferedOutput output, TRollResult result) throws CannotRenderRollException;
 }

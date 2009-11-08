@@ -1,97 +1,142 @@
 package info.reflectionsofmind.dicerobot;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
+import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactorySource;
 import info.reflectionsofmind.dicerobot.diceroller.LimitedRandomBasedDieRollerFactory;
-import info.reflectionsofmind.dicerobot.event.RollEvent;
-import info.reflectionsofmind.dicerobot.event.SelfAddedEvent;
-import info.reflectionsofmind.dicerobot.event.SetDefaultEvent;
-import info.reflectionsofmind.dicerobot.exception.RollingPipelineException;
-import info.reflectionsofmind.dicerobot.exception.InvalidRollFormatException;
-import info.reflectionsofmind.dicerobot.exception.RollLimitReachedException;
-import info.reflectionsofmind.dicerobot.method.IRollingMethod;
-import info.reflectionsofmind.dicerobot.method.impl.ditv.DogsInTheVineyard;
-import info.reflectionsofmind.dicerobot.method.impl.nwod.NewWorldOfDarkness;
-import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
+import info.reflectionsofmind.dicerobot.diceroller.RandomBasedDieRollerFactory;
+import info.reflectionsofmind.dicerobot.exception.FatalException;
+import info.reflectionsofmind.dicerobot.exception.UserReadableException;
+import info.reflectionsofmind.dicerobot.exception.output.OutputException;
+import info.reflectionsofmind.dicerobot.exception.parse.RequestTooLongException;
+import info.reflectionsofmind.dicerobot.method.IMethodFactory;
+import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
+import info.reflectionsofmind.dicerobot.output.LimitingWriter;
+import info.reflectionsofmind.dicerobot.output.WrappingWriter;
 import info.reflectionsofmind.dicerobot.wrapper.RollRequest;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * {@link DiceRobot} class is abstracted from Google's implementations of Wavelet, Blip and Gadget.
- */
-public class DiceRobot
+public class DiceRobot implements IDiceRobotRoller, IDieRollerFactorySource, Serializable
 {
-	public static final Map<String, IRollingMethod> ROLLING_METHODS = new LinkedHashMap<String, IRollingMethod>();
+	private static final Pattern DIE_ROLL_PATTERN = Pattern.compile("\\[(?:(\\w+)\\:)?([^\\]=]+)\\]");
 	
-	static
+	private Integer maxRequestLength = null;
+	private Integer maxResultLength = null;
+	private Integer maxNumberOfRolls = null;
+	
+	private final IMethodFactory factory;
+	
+	public DiceRobot(final IMethodFactory factory)
 	{
-		final IDieRollerFactory factory = new LimitedRandomBasedDieRollerFactory(10000);
-		ROLLING_METHODS.put("sum", new AdditiveRoll(factory));
-		ROLLING_METHODS.put("ditv", new DogsInTheVineyard(factory));
-		ROLLING_METHODS.put("nwod", new NewWorldOfDarkness(factory));
+		this.factory = factory;
 	}
 	
-	private final String defaultRollingMethod;
-	
-	public DiceRobot(final String defaultRollingMethod)
+	public List<RollRequest> extractRequests(final IWritableText text)
 	{
-		if (defaultRollingMethod == null)
-		{
-			this.defaultRollingMethod = ROLLING_METHODS.keySet().iterator().next();
-		}
-		else
-		{
-			this.defaultRollingMethod = defaultRollingMethod;
-		}
-	}
-	
-	public void onEvent(final SelfAddedEvent event)
-	{
-		event.getWavelet().setDefaultRollingMethod(this.defaultRollingMethod);
-		event.getWavelet().createHomeBlip();
-	}
-	
-	public void onEvent(final SetDefaultEvent event)
-	{
-		event.getWavelet().setDefaultRollingMethod(event.getNewDefaultMethod());
-	}
-	
-	public void onEvent(final RollEvent event)
-	{
-		final RollRequest request = event.getRequest();
-		request.getOutput().append(" = ");
+		final Matcher matcher = DIE_ROLL_PATTERN.matcher(text.getText());
+		final List<RollRequest> requests = new ArrayList<RollRequest>();
 		
-		final String requestedCode = request.getMethod();
-		final String defaultCode = event.getWavelet().getDefaultRollingMethod();
-		final String resolvedCode = (requestedCode == null) ? defaultCode : requestedCode;
-		
-		if (ROLLING_METHODS.containsKey(resolvedCode))
+		while (matcher.find())
 		{
-			final IRollingMethod method = ROLLING_METHODS.get(resolvedCode);
+			final String config = matcher.group(1);
+			final String request = matcher.group(2);
+			requests.add(new RollRequest(text.createOutput(matcher.end(2)), config, request));
+		}
+		
+		return requests;
+	}
+	
+	public void executeRequest(final RollRequest request, final IRollExecutionContext context) throws FatalException
+	{
+		try
+		{
+			final String config = request.getConfig() != null ? request.getConfig() : context.getDefaultConfig();
+			final String input = request.getRequest();
 			
 			try
 			{
-				method.writeResult(request.getRoll(), request.getOutput());
+				if (requestTooLong(input))
+					throw new RequestTooLongException(input.length(), getMaxRequestLength());
+				
+				final IFormattedBufferedOutput wrappedOutput = wrapOutput(request);
+				
+				this.factory.createMethod(config)
+						.setDieRollerFactory(createDieRollerFactory())
+						.writeResult(input, wrappedOutput);
+				
+				wrappedOutput.flush();
 			}
-			catch (final InvalidRollFormatException e)
+			catch (final UserReadableException exception)
 			{
-				request.getOutput().append("invalid roll format").with("style/color", "red");
+				request.getOutput().append(exception.getMessage()).with("style/color", "red");
 			}
-			catch (final RollLimitReachedException e)
-			{
-				request.getOutput().append("you are asking for too much: rolls > 10000").with("style/color", "red");
-			}
-			catch (final RollingPipelineException e)
-			{
-				request.getOutput().append("unknown error").with("style/color", "red");
-			}
+		}
+		catch (final OutputException exception)
+		{
+			throw new FatalException(exception);
+		}
+	}
+	
+	private boolean requestTooLong(final String input)
+	{
+		return getMaxRequestLength() != null && input.length() > getMaxRequestLength();
+	}
+	
+	private IFormattedBufferedOutput wrapOutput(final RollRequest request)
+	{
+		final IFormattedBufferedOutput output = getMaxResultLength() == null
+				? new WrappingWriter(request.getOutput())
+				: new LimitingWriter(request.getOutput(), getMaxResultLength());
+		
+		return output;
+	}
+	
+	public Integer getMaxRequestLength()
+	{
+		return this.maxRequestLength;
+	}
+	
+	public Integer getMaxResultLength()
+	{
+		return this.maxResultLength;
+	}
+	
+	public Integer getMaxNumberOfRolls()
+	{
+		return this.maxNumberOfRolls;
+	}
+	
+	public DiceRobot setMaxRequestLength(final Integer maxRequestLength)
+	{
+		this.maxRequestLength = maxRequestLength;
+		return this;
+	}
+	
+	public DiceRobot setMaxResultLength(final Integer maxResultLength)
+	{
+		this.maxResultLength = maxResultLength;
+		return this;
+	}
+	
+	public DiceRobot setMaxNumberOfRolls(final Integer maxNumberOfRolls)
+	{
+		this.maxNumberOfRolls = maxNumberOfRolls;
+		return this;
+	}
+	
+	public IDieRollerFactory createDieRollerFactory()
+	{
+		if (getMaxNumberOfRolls() == null)
+		{
+			return new RandomBasedDieRollerFactory();
 		}
 		else
 		{
-			request.getOutput().append("unknown method \"" + resolvedCode + "\"").with("style/color", "red");
+			return new LimitedRandomBasedDieRollerFactory(getMaxNumberOfRolls());
 		}
-		
-		request.getOutput().flush();
 	}
 }

@@ -1,5 +1,7 @@
 package info.reflectionsofmind.dicerobot.diceroller;
 
+import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
+
 import java.util.Random;
 
 public class RandomBasedDieRoller implements IDieRoller

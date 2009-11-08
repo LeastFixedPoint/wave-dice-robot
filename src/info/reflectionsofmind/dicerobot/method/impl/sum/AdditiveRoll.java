@@ -1,22 +1,26 @@
 package info.reflectionsofmind.dicerobot.method.impl.sum;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
-import info.reflectionsofmind.dicerobot.exception.RollingPipelineException;
-import info.reflectionsofmind.dicerobot.method.IFormattedBufferedOutput;
-import info.reflectionsofmind.dicerobot.method.IRollingMethod;
+import info.reflectionsofmind.dicerobot.method.impl.SimplePipelinedMethod;
 
-public class AdditiveRoll implements IRollingMethod
+public class AdditiveRoll extends SimplePipelinedMethod<SumParser, SumRequest, SumRoller, SumResult, SumWriter>
 {
-	private final IDieRollerFactory factory;
-	
-	public AdditiveRoll(final IDieRollerFactory factory)
+	@Override
+	protected SumParser createParser()
 	{
-		this.factory = factory;
+		return new SumParser();
 	}
 	
-	public void writeResult(final String input, final IFormattedBufferedOutput output) throws RollingPipelineException
+	@Override
+	protected SumRoller createRoller(final IDieRollerFactory factory)
 	{
-		new Writer().render(output, new Roller(this.factory).makeRoll(new Parser().parse(input)));
+		return new SumRoller(factory);
+	}
+	
+	@Override
+	protected SumWriter createWriter()
+	{
+		return new SumWriter();
 	}
 	
 	public String getName()

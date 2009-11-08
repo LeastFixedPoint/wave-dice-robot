@@ -1,28 +1,26 @@
 package info.reflectionsofmind.dicerobot.method.impl.nwod;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
-import info.reflectionsofmind.dicerobot.exception.RollingPipelineException;
-import info.reflectionsofmind.dicerobot.method.IFormattedBufferedOutput;
-import info.reflectionsofmind.dicerobot.method.IRollingMethod;
+import info.reflectionsofmind.dicerobot.method.impl.SimplePipelinedMethod;
 
-public class NewWorldOfDarkness implements IRollingMethod
+public class NewWorldOfDarkness extends SimplePipelinedMethod<NwodParser, NwodRequest, NwodRoller, NwodResult, NwodWriter>
 {
-	private final IDieRollerFactory factory;
-	
-	public NewWorldOfDarkness(final IDieRollerFactory factory)
+	@Override
+	protected NwodParser createParser()
 	{
-		this.factory = factory;
+		return new NwodParser();
 	}
 	
 	@Override
-	public void writeResult(final String input, final IFormattedBufferedOutput output) throws RollingPipelineException
+	protected NwodRoller createRoller(final IDieRollerFactory factory)
 	{
-		new Writer().render(output, new Roller(this.factory).makeRoll(new Parser().parse(input)));
+		return new NwodRoller(factory);
 	}
 	
-	public static String getSuccessForm(final int successes)
+	@Override
+	protected NwodWriter createWriter()
 	{
-		return successes == 1 ? "success" : "successes";
+		return new NwodWriter();
 	}
 	
 	@Override

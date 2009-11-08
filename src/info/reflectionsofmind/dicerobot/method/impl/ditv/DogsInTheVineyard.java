@@ -1,23 +1,26 @@
 package info.reflectionsofmind.dicerobot.method.impl.ditv;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
-import info.reflectionsofmind.dicerobot.exception.RollingPipelineException;
-import info.reflectionsofmind.dicerobot.method.IFormattedBufferedOutput;
-import info.reflectionsofmind.dicerobot.method.IRollingMethod;
+import info.reflectionsofmind.dicerobot.method.impl.SimplePipelinedMethod;
 
-public class DogsInTheVineyard implements IRollingMethod
+public class DogsInTheVineyard extends SimplePipelinedMethod<DitvParser, DitvRequest, DitvRoller, DitvResult, DitvWriter>
 {
-	private final IDieRollerFactory factory;
-	
-	public DogsInTheVineyard(final IDieRollerFactory factory)
+	@Override
+	protected DitvParser createParser()
 	{
-		this.factory = factory;
+		return new DitvParser();
 	}
 	
 	@Override
-	public void writeResult(final String input, final IFormattedBufferedOutput output) throws RollingPipelineException
+	protected DitvRoller createRoller(final IDieRollerFactory factory)
 	{
-		new Writer().render(output, new Roller(this.factory).makeRoll(new Parser().parse(input)));
+		return new DitvRoller(factory);
+	}
+	
+	@Override
+	protected DitvWriter createWriter()
+	{
+		return new DitvWriter();
 	}
 	
 	public String getName()
