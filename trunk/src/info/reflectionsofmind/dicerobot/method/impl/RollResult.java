@@ -53,7 +53,7 @@ public final class RollResult
 				{
 		public int compare(final RollResult o1, final RollResult o2)
 					{
-			return new Integer(o1.dieSize).compareTo(o2.dieSize);
+			return Integer.valueOf(o1.dieSize).compareTo(o2.dieSize);
 		}
 	};
 	
@@ -61,7 +61,7 @@ public final class RollResult
 				{
 		public int compare(final RollResult o1, final RollResult o2)
 					{
-			return new Integer(o1.result).compareTo(o2.result);
+			return Integer.valueOf(o1.result).compareTo(o2.result);
 		}
 	};
 }
