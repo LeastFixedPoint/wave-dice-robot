@@ -1,11 +1,11 @@
 #summary Latest changes to the Dicy
 #labels Featured
 
-= Currently working on =
+== Currently working on ==
 
   * One Roll Engine support.
 
-= 08 November 2009 =
+== 08 November 2009 ==
 
   * Added avatar, home page and description to Dicy profile.
   * Added following limitations on rolls:
@@ -13,10 +13,10 @@
     * length of generated output should not be more than 200 characters,
     * number of singular die rolls should not be more than 10000 per request.
 
-= 04 November 2009 =
+== 04 November 2009 ==
 
   * New World of Darkness support. E.g. `[nwod:12]`.
 
-= 02 Novermber 2009 =
+== 02 November 2009 ==
 
   * Now you can write just `[d6+d8]` instead of `[1d6+1d8]` for additive rolls.
