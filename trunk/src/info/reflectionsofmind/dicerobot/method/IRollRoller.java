@@ -1,11 +1,8 @@
 package info.reflectionsofmind.dicerobot.method;
 
-import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
-import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
+import info.reflectionsofmind.dicerobot.diceroller.CannotMakeRollException;
 
-public interface IRollRoller<TRollInput extends IRollInput, TRollOutput extends IRollOutput>
+public interface IRollRoller<TRollRequest extends IRollRequest, TRollResult extends IRollResult<TRollRequest>>
 {
-	TRollOutput makeRoll(TRollInput input) throws CannotMakeRollException;
-	
-	IRollRoller<TRollInput, TRollOutput> setDieRollerFactory(IDieRollerFactory factory);
+	TRollResult makeRoll(TRollRequest request) throws CannotMakeRollException;
 }

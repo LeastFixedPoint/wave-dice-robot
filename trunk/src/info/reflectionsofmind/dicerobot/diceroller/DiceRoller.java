@@ -1,6 +1,6 @@
 package info.reflectionsofmind.dicerobot.diceroller;
 
-import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
+import info.reflectionsofmind.dicerobot.exception.RollingPipelineException;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,7 +15,7 @@ public class DiceRoller
 		this.roller = roller;
 	}
 	
-	public List<DieRollResult> roll(final Integer number, final Integer die) throws CannotMakeRollException
+	public List<DieRollResult> roll(final Integer number, final Integer die) throws RollingPipelineException
 	{
 		final List<DieRollResult> rolls = new ArrayList<DieRollResult>(number);
 		

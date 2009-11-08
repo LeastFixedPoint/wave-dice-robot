@@ -1,11 +1,11 @@
 package info.reflectionsofmind.dicerobot.method.impl;
 
-public final class RollRequest
+public final class Roll
 {
 	private final int dieSize;
 	private final int count;
 	
-	public RollRequest(final int count, final int dieSize)
+	public Roll(final int count, final int dieSize)
 	{
 		this.dieSize = dieSize;
 		this.count = count;
@@ -30,10 +30,10 @@ public final class RollRequest
 	@Override
 	public boolean equals(final Object obj)
 	{
-		if (obj instanceof RollRequest)
+		if (obj instanceof Roll)
 		{
-			return ((RollRequest) obj).getDieSize() == getDieSize() &&
-					((RollRequest) obj).getCount() == getCount();
+			return ((Roll) obj).getDieSize() == getDieSize() &&
+					((Roll) obj).getCount() == getCount();
 		}
 		else
 		{

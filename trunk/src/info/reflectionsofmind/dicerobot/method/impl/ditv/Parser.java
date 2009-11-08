@@ -9,8 +9,9 @@ public class Parser implements IRollParser<Request>
 {
 	private final static Pattern PATTERN = Pattern.compile("\\d+[dк]\\d+(\\+\\d+[dк]\\d+)*");
 	
-	public Request parse(final String text) throws CannotParseRollException
+	public Request parse(final String rawText) throws CannotParseRollException
 	{
+		final String text = rawText.replaceAll("\\s", "");
 		final Matcher matcher = PATTERN.matcher(text);
 		
 		if (!matcher.matches())
