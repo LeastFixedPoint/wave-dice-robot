@@ -9,9 +9,9 @@
 
   * Added avatar, home page and description to Dicy profile.
   * Added following limitations on rolls:
-  ** length of submitted request should not be more than 200 characters,
-  ** length of generated output should not be more than 200 characters,
-  ** number of singular die rolls should not be more than 10000 per request.
+    * length of submitted request should not be more than 200 characters,
+    * length of generated output should not be more than 200 characters,
+    * number of singular die rolls should not be more than 10000 per request.
 
 = 04 November 2009 =
 
