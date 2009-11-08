@@ -1,4 +1,5 @@
 #summary Developer notes and implementation details
+#labels Featured
 
 = State management =
 
