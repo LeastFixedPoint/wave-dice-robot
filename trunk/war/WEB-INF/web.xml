@@ -12,9 +12,19 @@
 		<servlet-class>info.reflectionsofmind.dicerobot.DiceRobotServlet</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>Profile</servlet-name>
+		<servlet-class>info.reflectionsofmind.dicerobot.DiceRobotProfile</servlet-class>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>DiceRobot</servlet-name>
 		<url-pattern>/_wave/robot/jsonrpc</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Profile</servlet-name>
+		<url-pattern>/_wave/robot/profile</url-pattern>
 	</servlet-mapping>
 
 	<jsp-config>	

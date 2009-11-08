@@ -2,7 +2,7 @@ package info.reflectionsofmind.dicerobot.dieroller;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRoller;
 import info.reflectionsofmind.dicerobot.diceroller.LimitedRandomBasedDieRoller;
-import info.reflectionsofmind.dicerobot.exception.RollLimitReachedException;
+import info.reflectionsofmind.dicerobot.exception.roll.RollLimitReachedException;
 
 import org.junit.Test;
 

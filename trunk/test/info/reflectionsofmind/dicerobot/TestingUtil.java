@@ -38,4 +38,12 @@ public class TestingUtil
 		rollWriter.render(writer, rollOutput);
 		assertEquals(expectedTextOutput, writer.getString());
 	}
+	
+	public static String replicate(final int count, final String string)
+	{
+		final StringBuilder builder = new StringBuilder(string.length() * count);
+		for (int i = 0; i < count; i++)
+			builder.append(string);
+		return builder.toString();
+	}
 }
