@@ -7,6 +7,8 @@
 
 In all rolling methods spaces are ignored - you may write `[d6+d8]` or `[d6 + d8]` as you like.
 
+If you want to roll with a method different from the one selected in gadget, write roll with a prefix. For example, when "Sum of all rolls" is selected, you can make a Dogs in the Vineyard roll with `[ditv:4d6+2d6]`.
+
 = Sum of all rolls =
 
 Examples:
