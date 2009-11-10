@@ -3,6 +3,8 @@
 == Currently working on ==
   * One Roll Engine support.
 ----
+== 10 November 2009 ==
+  * Implemented [http://en.wikipedia.org/wiki/Nemesis_(role-playing_game) Nemesis] ORE.
 == 08 November 2009 ==
   * Added avatar, home page and description to Dicy profile.
   * Added following limitations on rolls:
