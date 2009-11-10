@@ -1,10 +1,11 @@
 #summary Latest changes to the Dicy
 #labels Featured
 == Currently working on ==
-  * Exalted support.
+  * [http://en.wikipedia.org/wiki/Exalted Exalted] support.
 ----
 == 10 November 2009 ==
   * Implemented [http://en.wikipedia.org/wiki/Nemesis_(role-playing_game) Nemesis] ORE.
+  * Implemented [http://en.wikipedia.org/wiki/Exalted Exalted].
 == 08 November 2009 ==
   * Added avatar, home page and description to Dicy profile.
   * Added following limitations on rolls:
@@ -13,7 +14,7 @@
     * number of singular die rolls should not be more than 10000 per request.
 ----
 == 04 November 2009 ==
-  * New World of Darkness support. E.g. `[nwod:12]`.
+  * [http://en.wikipedia.org/wiki/NWOD New World of Darkness] support. E.g. `[nwod:12]`.
 ----
 == 02 November 2009 ==
   * Now you can write just `[d6+d8]` instead of `[1d6+1d8]` for additive rolls.
