@@ -1,6 +1,9 @@
 package info.reflectionsofmind.dicerobot;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import info.reflectionsofmind.dicerobot.diceroller.IDieRoller;
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
 import info.reflectionsofmind.dicerobot.method.IRollResult;
@@ -9,17 +12,16 @@ import info.reflectionsofmind.dicerobot.method.IRollingMethod;
 import info.reflectionsofmind.dicerobot.method.MockOutput;
 
 import org.junit.Assert;
-import org.mockito.Mockito;
 
 public class TestingUtil
 {
 	public static IDieRollerFactory mockDieRollerFactory(final Integer first, final Integer... answers) throws Exception
 	{
-		final IDieRoller roller = Mockito.mock(IDieRoller.class);
-		Mockito.when(roller.roll(Mockito.anyInt())).thenReturn(first, answers);
+		final IDieRoller roller = mock(IDieRoller.class);
+		when(roller.roll(anyInt())).thenReturn(first, answers);
 		
-		final IDieRollerFactory factory = Mockito.mock(IDieRollerFactory.class);
-		Mockito.when(factory.createDieRoller()).thenReturn(roller);
+		final IDieRollerFactory factory = mock(IDieRollerFactory.class);
+		when(factory.createDieRoller()).thenReturn(roller);
 		
 		return factory;
 	}
