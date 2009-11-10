@@ -1,7 +1,7 @@
 #summary Latest changes to the Dicy
 #labels Featured
 == Currently working on ==
-  * One Roll Engine support.
+  * Exalted support.
 ----
 == 10 November 2009 ==
   * Implemented [http://en.wikipedia.org/wiki/Nemesis_(role-playing_game) Nemesis] ORE.
