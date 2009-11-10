@@ -5,6 +5,8 @@
 
 = General information =
 
+To make a roll, just add `dice-y@appspot.com` to your wave, select the method from configuration gadget and enter something like `[2d6]` anywhere on the wave..
+
 In all rolling methods spaces are ignored - you may write `[d6+d8]` or `[d6 + d8]` as you like.
 
 If you want to roll with a method different from the one selected in gadget, write roll with a prefix. For example, when "Sum of all rolls" is selected, you can make a Dogs in the Vineyard roll with `[ditv:4d6+2d6]`.
