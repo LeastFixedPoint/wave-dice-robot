@@ -1,11 +1,11 @@
 #summary Description of how to roll with different methods
 #labels Featured
 
+<wiki:toc max_depth="1" />
+
 = General information =
 
 In all rolling methods spaces are ignored - you may write `[d6+d8]` or `[d6 + d8]` as you like.
-
-<wiki:toc max_depth="1" />
 
 = Sum of all rolls =
 
