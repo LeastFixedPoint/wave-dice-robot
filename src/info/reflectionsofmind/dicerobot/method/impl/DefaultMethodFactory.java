@@ -4,6 +4,7 @@ import info.reflectionsofmind.dicerobot.exception.MethodNotFoundException;
 import info.reflectionsofmind.dicerobot.method.IMethodFactory;
 import info.reflectionsofmind.dicerobot.method.IRollingMethod;
 import info.reflectionsofmind.dicerobot.method.impl.ditv.DogsInTheVineyard;
+import info.reflectionsofmind.dicerobot.method.impl.nemesis.Nemesis;
 import info.reflectionsofmind.dicerobot.method.impl.nwod.NewWorldOfDarkness;
 import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
 
@@ -19,6 +20,7 @@ public class DefaultMethodFactory implements IMethodFactory
 		this.methods.put("sum", new AdditiveRoll());
 		this.methods.put("ditv", new DogsInTheVineyard());
 		this.methods.put("nwod", new NewWorldOfDarkness());
+		this.methods.put("nem", new Nemesis());
 	}
 	
 	public IRollingMethod createMethod(final String config) throws MethodNotFoundException

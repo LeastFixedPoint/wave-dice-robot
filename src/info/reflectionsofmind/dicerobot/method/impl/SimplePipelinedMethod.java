@@ -1,7 +1,9 @@
 package info.reflectionsofmind.dicerobot.method.impl;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
+import info.reflectionsofmind.dicerobot.exception.CannotRenderRollException;
 import info.reflectionsofmind.dicerobot.exception.UserReadableException;
+import info.reflectionsofmind.dicerobot.exception.output.OutputException;
 import info.reflectionsofmind.dicerobot.method.IRollParser;
 import info.reflectionsofmind.dicerobot.method.IRollRequest;
 import info.reflectionsofmind.dicerobot.method.IRollResult;
@@ -16,7 +18,15 @@ public abstract class SimplePipelinedMethod<TRollParser extends IRollParser<TRol
 	{
 		final TRollRequest request = createParser().parse(input);
 		final TRollResult result = createRoller(getDieRollerFactory()).makeRoll(request);
-		createWriter().render(output, result);
+		
+		try
+		{
+			createWriter().render(output, result);
+		}
+		catch (final OutputException exception)
+		{
+			throw CannotRenderRollException.wrap(exception);
+		}
 	}
 	
 	abstract protected TRollParser createParser();
