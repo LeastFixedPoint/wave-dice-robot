@@ -71,6 +71,15 @@ public class SumWriter implements IRollWriter<SumResult>
 			{
 				output.append(" = ").append(sum);
 			}
+			
+			final Integer tn = result.getRequest().getTargetNumber();
+			
+			if (tn != null)
+			{
+				final String resolution = sum >= tn ? "success" : "failure";
+				final int threshold = abs(sum - tn);
+				output.append(" = ").append(resolution).append(" by ").append(threshold);
+			}
 		}
 		catch (final OutputException exception)
 		{

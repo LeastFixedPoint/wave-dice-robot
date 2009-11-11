@@ -2,6 +2,7 @@ package info.reflectionsofmind.dicerobot.method;
 
 import static info.reflectionsofmind.dicerobot.TestingUtil.assertWrite;
 import static info.reflectionsofmind.dicerobot.TestingUtil.mockDieRollerFactory;
+import static java.lang.Integer.valueOf;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
@@ -168,5 +169,39 @@ public class SimpleAdditiveTest
 				new SumRequest.Number(-5),
 				new SumRequest.Roll(3, 8)
 				), request.getTokens());
+	}
+	
+	@Test
+	public void shouldParseTargetNumbersWithVs() throws Exception
+	{
+		final SumRequest request = new SumParser().parse("3d6 vs 10");
+		assertEquals(valueOf(10), request.getTargetNumber());
+	}
+	
+	@Test
+	public void shouldParseTargetNumbersWithTn() throws Exception
+	{
+		final SumRequest request = new SumParser().parse("3d6 tn 10");
+		assertEquals(valueOf(10), request.getTargetNumber());
+	}
+	
+	@Test
+	public void shouldWriteSuccessThresholdForTargetNumber() throws Exception
+	{
+		final SumRequest request = new SumRequest().add(2, 6).setTargetNumber(8);
+		final Roll roll = (Roll) request.getTokens().get(0);
+		final SumResult result = new SumResult(request).add(roll, 5, 6);
+		
+		assertWrite(new SumWriter(), result, "11 = success by 3");
+	}
+	
+	@Test
+	public void shouldWriteFailyureThresholdForTargetNumber() throws Exception
+	{
+		final SumRequest request = new SumRequest().add(2, 6).setTargetNumber(8);
+		final Roll roll = (Roll) request.getTokens().get(0);
+		final SumResult result = new SumResult(request).add(roll, 3, 4);
+		
+		assertWrite(new SumWriter(), result, "7 = failure by 1");
 	}
 }

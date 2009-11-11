@@ -26,6 +26,10 @@ public class DitvParser implements IRollParser<DitvRequest>
 			final String[] pair = roll.split("d");
 			final int number = Integer.parseInt(pair[0]);
 			final int die = Integer.parseInt(pair[1]);
+			
+			if (number == 0 || die == 0)
+				throw new CannotParseRollException("die count and size must be > 0");
+			
 			input.add(number, die);
 		}
 		
