@@ -1,5 +1,6 @@
 package info.reflectionsofmind.dicerobot.method.impl.sum;
 
+import static java.lang.Integer.valueOf;
 import info.reflectionsofmind.dicerobot.exception.CannotParseRollException;
 import info.reflectionsofmind.dicerobot.exception.parse.InvalidRollFormatException;
 import info.reflectionsofmind.dicerobot.method.IRollParser;
@@ -13,6 +14,7 @@ public class SumParser implements IRollParser<SumRequest>
 {
 	private final static Pattern ROLL = Pattern.compile("\\d*d\\d+");
 	private final static Pattern NUMBER = Pattern.compile("\\d+");
+	private final static Pattern TARGET = Pattern.compile("(.*)(?:vs|tn)(\\d+)");
 	
 	public static List<String> split(final String string, final Pattern pattern)
 	{
@@ -34,10 +36,19 @@ public class SumParser implements IRollParser<SumRequest>
 	}
 	
 	@Override
-	public SumRequest parse(final String input) throws CannotParseRollException
+	public SumRequest parse(final String rawInput) throws CannotParseRollException
 	{
-		final List<String> tokens = split(input.replaceAll("\\s", ""), Pattern.compile("[-+]"));
 		final SumRequest request = new SumRequest();
+		String input = rawInput.replaceAll("\\s", "");
+		
+		final Matcher matcher = TARGET.matcher(input);
+		if (matcher.matches())
+		{
+			request.setTargetNumber(valueOf(matcher.group(2)));
+			input = matcher.group(1);
+		}
+		
+		final List<String> tokens = split(input, Pattern.compile("[-+]"));
 		
 		for (final String signed : tokens)
 		{
@@ -69,6 +80,10 @@ public class SumParser implements IRollParser<SumRequest>
 				final int pos = token.indexOf('d');
 				final int count = (pos == 0) ? 1 : Integer.parseInt(token.substring(0, pos));
 				final int dieSize = Integer.parseInt(token.substring(pos + 1));
+				
+				if (count == 0 || dieSize == 0)
+					throw new CannotParseRollException("die count and size must be > 0");
+				
 				request.add(multiplier * count, dieSize);
 			}
 			else

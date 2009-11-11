@@ -8,6 +8,7 @@ import java.util.List;
 public class SumRequest implements IRollRequest
 {
 	private final List<Token> tokens = new ArrayList<Token>();
+	private Integer targetNumber;
 	
 	public SumRequest add(final int number)
 	{
@@ -18,6 +19,12 @@ public class SumRequest implements IRollRequest
 	public SumRequest add(final int count, final int dieSize)
 	{
 		this.tokens.add(new Roll(count, dieSize));
+		return this;
+	}
+	
+	public SumRequest setTargetNumber(final Integer targetNumber)
+	{
+		this.targetNumber = targetNumber;
 		return this;
 	}
 	
@@ -101,5 +108,10 @@ public class SumRequest implements IRollRequest
 		{
 			return this.count + "d" + this.dieSize;
 		}
+	}
+	
+	public Integer getTargetNumber()
+	{
+		return this.targetNumber;
 	}
 }

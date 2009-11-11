@@ -63,7 +63,6 @@ public class DiceRobot implements IDiceRobotRoller, IDieRollerFactorySource, Ser
 					throw new RequestTooLongException(input.length(), getMaxRequestLength());
 				
 				final IFormattedBufferedOutput wrappedOutput = wrapOutput(request);
-				
 				this.factory.createMethod(config)
 						.setDieRollerFactory(createDieRollerFactory())
 						.writeResult(input, wrappedOutput);

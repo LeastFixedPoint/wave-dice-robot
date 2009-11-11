@@ -136,4 +136,17 @@ public class ServletTest
 		
 		verify(textView).insert(eq(204), eq(" = request too long (max 200)"));
 	}
+	
+	@Test
+	public void shouldComplainAboutWrongMethod()
+	{
+		final String request = "blah:3x6";
+		final DiceRobotServlet servlet = new DiceRobotServlet();
+		final RobotMessageBundle bundle = mockRollBundle("[" + request + "]", "sum");
+		final TextView textView = bundle.getEvents().get(0).getBlip().getDocument();
+		
+		servlet.processEvents(bundle);
+		
+		verify(textView).insert(eq(9), eq(" = invalid method (blah)"));
+	}
 }

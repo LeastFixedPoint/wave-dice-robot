@@ -9,7 +9,8 @@ public final class NwodParser implements IRollParser<NwodRequest>
 	{
 		try
 		{
-			return new NwodRequest(Integer.parseInt(input));
+			final int count = Integer.parseInt(input);
+			return new NwodRequest(count);
 		}
 		catch (final NumberFormatException exception)
 		{

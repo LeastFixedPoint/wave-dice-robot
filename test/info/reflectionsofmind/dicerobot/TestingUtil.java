@@ -34,10 +34,10 @@ public class TestingUtil
 	}
 	
 	public static <TRollWriter extends IRollWriter<TRollResult>, TRollResult extends IRollResult<?>> void assertWrite(
-			final TRollWriter rollWriter, final TRollResult rollOutput, final String expectedTextOutput) throws Exception
+			final TRollWriter rollWriter, final TRollResult rollResult, final String expectedTextOutput) throws Exception
 	{
 		final MockOutput writer = new MockOutput();
-		rollWriter.render(writer, rollOutput);
+		rollWriter.render(writer, rollResult);
 		assertEquals(expectedTextOutput, writer.getString());
 	}
 	

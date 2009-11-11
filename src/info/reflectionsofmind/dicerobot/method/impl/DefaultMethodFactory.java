@@ -27,6 +27,9 @@ public class DefaultMethodFactory implements IMethodFactory
 	
 	public IRollingMethod createMethod(final String config) throws MethodNotFoundException
 	{
+		if (!this.methods.containsKey(config))
+			throw new MethodNotFoundException(config);
+		
 		return this.methods.get(config);
 	}
 	

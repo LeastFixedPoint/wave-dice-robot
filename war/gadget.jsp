@@ -55,6 +55,8 @@
 							} 
 						%>
 					</table>
+					<br/>
+					<a href="http://code.google.com/p/wave-dice-robot/wiki/RollingMethods" target="_blank">Click here for instructions</a>
 				</p>
 				
 				<script type="text/javascript"> 
