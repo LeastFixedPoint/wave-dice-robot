@@ -2,6 +2,11 @@
 #labels Featured
 == Currently working on ==
   * Preventing roll results from being changed by other people.
+  * Other systems.
+  * Configuration subpanel for each rolling method.
+----
+== 16 November 2009
+  * Implemented [http://en.wikipedia.org/wiki/D6_system D6 System]
 ----
 == 10 November 2009 ==
   * Implemented [http://en.wikipedia.org/wiki/Nemesis_(role-playing_game) Nemesis] ORE.
