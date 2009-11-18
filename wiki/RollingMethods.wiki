@@ -28,6 +28,21 @@ Features:
 To do:
   * multiplication, division and brackets.
 
+= D20 System =
+
+This is the same as "Sum of all rolls" with one addition:
+  * `[cg]` - generate ability scores for a character.
+
+= D6 System =
+
+Examples:
+  * `[3D+2]` - roll three dice (one of them wild) and add 2 pips.
+  * `[3D+2+2D+1]` - roll five dice (one of them wild) and add 3 pips.
+
+Features:
+  * rolls are written like `5D`, pips are like `3`;
+  * all dice and pips in the roll are totaled before rolling.
+
 = Dogs in the Vineyard =
 
 Examples:
