@@ -3,7 +3,13 @@
 == Currently working on ==
   * Preventing roll results from being changed by other people.
   * Other systems.
-  * Configuration subpanel for each rolling method.
+  * Configuration subpanel for other rolling methods.
+  * Examples for rolling methods in configuration subpanel.
+----
+== 18 November 2009 ==
+  * Configuration subpanel.
+  * Grouping settings for "Sum of all rolls" method.
+  * Implemented [http://en.wikipedia.org/wiki/D20_system D20 System] with character generation.
 ----
 == 16 November 2009 ==
   * Implemented [http://en.wikipedia.org/wiki/D6_system D6 System]
