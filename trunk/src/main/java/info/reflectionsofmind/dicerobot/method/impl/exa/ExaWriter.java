@@ -5,21 +5,26 @@ import info.reflectionsofmind.dicerobot.exception.output.OutputException;
 import info.reflectionsofmind.dicerobot.method.IRollWriter;
 import info.reflectionsofmind.dicerobot.method.impl.exa.ExaResult.Group;
 import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
+import info.reflectionsofmind.dicerobot.output.IStyle;
+import info.reflectionsofmind.dicerobot.output.JoiningWriter;
+import info.reflectionsofmind.dicerobot.output.Style;
 
 public class ExaWriter implements IRollWriter<ExaResult>
 {
 	public void render(final IFormattedBufferedOutput output, final ExaResult result) throws CannotRenderRollException, OutputException
 	{
+		final JoiningWriter joiner = new JoiningWriter(output, " ");
+		
 		for (final Group group : result.getGroups())
 		{
 			for (final Integer roll : group.getRolls())
 			{
-				final String color = (roll >= group.getTargetNumber()) ? "green" : "red";
-				output.append(roll).with("style/color", color).append(" ");
+				final IStyle style = (roll >= group.getTargetNumber()) ? Style.GREEN : Style.RED;
+				joiner.append(roll).with(style);
 			}
 		}
 		
-		output.append("= ");
+		output.append(" = ");
 		
 		int successes = 0;
 		int ones = 0;
@@ -42,21 +47,21 @@ public class ExaWriter implements IRollWriter<ExaResult>
 		
 		if (successes == result.getRequest().getDifficulty())
 		{
-			output.append("success").with("style/fontFamily", "arial black, sans serif").with("style/color", "green");
+			output.append("success").with(Style.EXTRA_BOLD).with(Style.GREEN);
 		}
 		else if (successes > result.getRequest().getDifficulty())
 		{
 			final int threshold = successes - result.getRequest().getDifficulty();
-			output.append("success +" + threshold).with("style/fontFamily", "arial black, sans serif").with("style/color", "green");
+			output.append("success +" + threshold).with(Style.EXTRA_BOLD).with(Style.GREEN);
 		}
 		else if (successes > 0 || ones == 0)
 		{
 			final int threshold = result.getRequest().getDifficulty() - successes;
-			output.append("failure -" + threshold).with("style/fontFamily", "arial black, sans serif").with("style/color", "black");
+			output.append("failure -" + threshold).with(Style.EXTRA_BOLD);
 		}
 		else
 		{
-			output.append("BOTCH").with("style/fontFamily", "arial black, sans serif").with("style/color", "red");
+			output.append("BOTCH").with(Style.EXTRA_BOLD).with(Style.RED);
 		}
 	}
 }

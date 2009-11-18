@@ -1,19 +1,21 @@
 package info.reflectionsofmind.dicerobot.method;
 
 import static info.reflectionsofmind.dicerobot.TestingUtil.assertWrite;
-import static info.reflectionsofmind.dicerobot.TestingUtil.mockDieRollerFactory;
+import static info.reflectionsofmind.dicerobot.TestingUtil.mockRolls;
 import static java.lang.Integer.valueOf;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import info.reflectionsofmind.dicerobot.MockOutput;
 import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
+import info.reflectionsofmind.dicerobot.method.impl.sum.SumConfig;
 import info.reflectionsofmind.dicerobot.method.impl.sum.SumParser;
 import info.reflectionsofmind.dicerobot.method.impl.sum.SumRequest;
 import info.reflectionsofmind.dicerobot.method.impl.sum.SumResult;
 import info.reflectionsofmind.dicerobot.method.impl.sum.SumRoller;
 import info.reflectionsofmind.dicerobot.method.impl.sum.SumWriter;
+import info.reflectionsofmind.dicerobot.method.impl.sum.SumConfig.Grouping;
 import info.reflectionsofmind.dicerobot.method.impl.sum.SumRequest.Number;
 import info.reflectionsofmind.dicerobot.method.impl.sum.SumRequest.Roll;
-import info.reflectionsofmind.dicerobot.method.impl.sum.SumWriter.CollapseMode;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -35,40 +37,35 @@ public class SimpleAdditiveTest
 	@Test
 	public void shouldRollDice() throws Exception
 	{
-		final IRollingMethod method = new AdditiveRoll().setDieRollerFactory(mockDieRollerFactory(1, 6, 3));
-		method.writeResult("3d6", this.output);
+		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "3d6", this.output);
 		assertEquals("10", this.output.getString());
 	}
 	
 	@Test
 	public void shouldAllowNumbers() throws Exception
 	{
-		final IRollingMethod method = new AdditiveRoll().setDieRollerFactory(mockDieRollerFactory(1, 6, 3));
-		method.writeResult("5", this.output);
+		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "5", this.output);
 		assertEquals("5", this.output.getString());
 	}
 	
 	@Test
 	public void shouldAdd() throws Exception
 	{
-		final IRollingMethod method = new AdditiveRoll().setDieRollerFactory(mockDieRollerFactory(1, 6, 3));
-		method.writeResult("3d6+3", this.output);
+		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "3d6+3", this.output);
 		assertEquals("10 + 3 = 13", this.output.getString());
 	}
 	
 	@Test
 	public void shouldSubtract() throws Exception
 	{
-		final IRollingMethod method = new AdditiveRoll().setDieRollerFactory(mockDieRollerFactory(1, 6, 3));
-		method.writeResult("3d6-3", this.output);
+		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "3d6-3", this.output);
 		assertEquals("10 - 3 = 7", this.output.getString());
 	}
 	
 	@Test
 	public void shouldRollOneDieIfNumberNotSpecified() throws Exception
 	{
-		final IRollingMethod method = new AdditiveRoll().setDieRollerFactory(mockDieRollerFactory(15));
-		method.writeResult("d20", this.output);
+		new AdditiveRoll().writeResult(mockRolls(15), new SumConfig(Grouping.GROUPED), "d20", this.output);
 		assertEquals("15", this.output.getString());
 	}
 	
@@ -103,9 +100,9 @@ public class SimpleAdditiveTest
 	@Test
 	public void shouldRollRolls() throws Exception
 	{
-		final SumRequest request = new SumRequest().add(-3, 6).add(-4).add(1, 20);
-		final SumResult result = new SumRoller(mockDieRollerFactory(2, 1, 6, 16)).makeRoll(request);
-		assertEquals(asList(-2, -1, -6, -4, 16), result.getResults());
+		final SumRequest request = new SumRequest().add(-3, 6).add(-4).add(1, 20).add(1, 20);
+		final SumResult result = new SumRoller(mockRolls(2, 1, 6, 16, 3)).makeRoll(request);
+		assertEquals(asList(-2, -1, -6, -4, 16, 3), result.getResults());
 	}
 	
 	@Test
@@ -141,7 +138,7 @@ public class SimpleAdditiveTest
 				.add((Roll) request.getTokens().get(0), -2, -1, -6)
 				.add((Roll) request.getTokens().get(2), 16);
 		
-		final SumWriter writer = new SumWriter().setCollapseMode(CollapseMode.NONE);
+		final SumWriter writer = new SumWriter().setCollapseMode(Grouping.EXPANDED);
 		
 		assertWrite(writer, result, "-2 - 1 - 6 - 4 + 16 = 3");
 	}
@@ -155,7 +152,7 @@ public class SimpleAdditiveTest
 				.add((Roll) request.getTokens().get(0), -2, -1, -6)
 				.add((Roll) request.getTokens().get(2), 16);
 		
-		final SumWriter writer = new SumWriter().setCollapseMode(CollapseMode.ALL);
+		final SumWriter writer = new SumWriter().setCollapseMode(Grouping.RESULT);
 		
 		assertWrite(writer, result, "3");
 	}

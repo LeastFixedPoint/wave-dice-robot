@@ -4,53 +4,49 @@ import info.reflectionsofmind.dicerobot.exception.CannotRenderRollException;
 import info.reflectionsofmind.dicerobot.exception.output.OutputException;
 import info.reflectionsofmind.dicerobot.method.IRollWriter;
 import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
+import info.reflectionsofmind.dicerobot.output.JoiningWriter;
+import info.reflectionsofmind.dicerobot.output.Style;
 
 public class NwodWriter implements IRollWriter<NwodResult>
 {
 	@Override
-	public void render(final IFormattedBufferedOutput writer, final NwodResult output) throws CannotRenderRollException
+	public void render(final IFormattedBufferedOutput output, final NwodResult result) throws CannotRenderRollException
 	{
 		int successes = 0;
 		int botches = 0;
 		
-		final boolean chanceRoll = output.getRequest().getDicePool() <= 0;
+		final boolean chanceRoll = result.getRequest().getDicePool() <= 0;
+		
+		final JoiningWriter joiner = new JoiningWriter(output, " ");
 		
 		try
 		{
-			for (final Integer result : output.getResults())
+			for (final Integer roll : result.getRolls())
 			{
-				successes += result > 7 ? 1 : 0;
-				botches += result == 1 ? 1 : 0;
+				successes += roll > 7 ? 1 : 0;
+				botches += roll == 1 ? 1 : 0;
 				
-				writer.append(result).append(" ");
+				joiner.append(roll);
 				
-				if (result == 10)
-				{
-					writer.with("style/fontFamily", "arial black, sans serif");
-				}
-				else if (result > 7)
-				{
-					writer.with("style/fontSize", "0.75em");
-				}
-				else
-				{
-					writer.with("style/fontWeight", "bold");
-				}
+				if (roll == 10)
+					joiner.with(Style.BOLD);
+				else if (roll < 8)
+					joiner.with(Style.SMALL);
 			}
 			
-			writer.append("= ");
+			output.append(" = ");
 			
 			if (successes > 0)
 			{
-				writer.append(successes).append(" ").append(successes > 1 ? "successes" : "success");
+				output.append(successes).with(Style.EXTRA_BOLD).append(" ").append(successes > 1 ? "successes" : "success");
 			}
 			else if (chanceRoll && botches > 0 && successes == 0)
 			{
-				writer.append("dramatic failure").with("style/fontWeight", "bold");
+				output.append("dramatic failure").with(Style.EXTRA_BOLD);
 			}
 			else
 			{
-				writer.append("failure");
+				output.append("failure").with(Style.EXTRA_BOLD);
 			}
 		}
 		catch (final OutputException exception)

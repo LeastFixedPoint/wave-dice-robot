@@ -6,6 +6,8 @@ import info.reflectionsofmind.dicerobot.exception.CannotRenderRollException;
 import info.reflectionsofmind.dicerobot.exception.output.OutputException;
 import info.reflectionsofmind.dicerobot.method.IRollWriter;
 import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
+import info.reflectionsofmind.dicerobot.output.JoiningWriter;
+import info.reflectionsofmind.dicerobot.output.Style;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,40 +17,19 @@ public class NemWriter implements IRollWriter<NemResult>
 {
 	public void render(final IFormattedBufferedOutput output, final NemResult result) throws CannotRenderRollException, OutputException
 	{
-		boolean first = true;
+		final JoiningWriter joiner = new JoiningWriter(output, " + ");
 		
 		for (final WxH set : getSets(result))
-		{
-			if (first)
-				first = false;
-			else
-				output.append(" + ");
-			
-			output.append(set.getWidth() + "x" + set.getHeight()).with("style/fontFamily", "arial black, sans serif");
-		}
+			joiner.append(set.getWidth() + "x" + set.getHeight()).with(Style.EXTRA_BOLD);
 		
 		if (result.getRequest().getTrumpDice() > 0)
-		{
-			if (first)
-				first = false;
-			else
-				output.append(" + ");
-			
-			output.append(result.getRequest().getTrumpDice() + DiceType.TRUMP.getCode()).with("style/fontFamily", "arial black, sans serif");
-		}
+			joiner.append(result.getRequest().getTrumpDice() + DiceType.TRUMP.getCode()).with(Style.EXTRA_BOLD);
 		
 		for (final Integer value : getLeftovers(result))
-		{
-			if (first)
-				first = false;
-			else
-				output.append(" + ");
-			
-			output.append(value);
-		}
+			joiner.append(value);
 		
-		if (first)
-			output.append("nothing");
+		if (joiner.isEmpty())
+			joiner.append("nothing");
 	}
 	
 	private List<Integer> getLeftovers(final NemResult result)

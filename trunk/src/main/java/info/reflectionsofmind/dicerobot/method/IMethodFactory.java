@@ -6,5 +6,5 @@ import java.io.Serializable;
 
 public interface IMethodFactory extends Serializable
 {
-	IRollingMethod createMethod(String config) throws MethodNotFoundException;
+	IRollingMethod getMethod(String config) throws MethodNotFoundException;
 }

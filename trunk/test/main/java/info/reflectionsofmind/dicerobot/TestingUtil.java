@@ -8,14 +8,10 @@ import info.reflectionsofmind.dicerobot.diceroller.IDieRoller;
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
 import info.reflectionsofmind.dicerobot.method.IRollResult;
 import info.reflectionsofmind.dicerobot.method.IRollWriter;
-import info.reflectionsofmind.dicerobot.method.IRollingMethod;
-import info.reflectionsofmind.dicerobot.method.MockOutput;
-
-import org.junit.Assert;
 
 public class TestingUtil
 {
-	public static IDieRollerFactory mockDieRollerFactory(final Integer first, final Integer... answers) throws Exception
+	public static IDieRollerFactory mockRolls(final Integer first, final Integer... answers) throws Exception
 	{
 		final IDieRoller roller = mock(IDieRoller.class);
 		when(roller.roll(anyInt())).thenReturn(first, answers);
@@ -24,13 +20,6 @@ public class TestingUtil
 		when(factory.createDieRoller()).thenReturn(roller);
 		
 		return factory;
-	}
-	
-	public static void assertRoll(final IRollingMethod method, final String input, final String expectedOutput) throws Exception
-	{
-		final MockOutput output = new MockOutput();
-		method.writeResult(input, output);
-		Assert.assertEquals(expectedOutput, output.getString());
 	}
 	
 	public static <TRollWriter extends IRollWriter<TRollResult>, TRollResult extends IRollResult<?>> void assertWrite(
@@ -46,6 +35,7 @@ public class TestingUtil
 		final StringBuilder builder = new StringBuilder(string.length() * count);
 		for (int i = 0; i < count; i++)
 			builder.append(string);
+		
 		return builder.toString();
 	}
 }

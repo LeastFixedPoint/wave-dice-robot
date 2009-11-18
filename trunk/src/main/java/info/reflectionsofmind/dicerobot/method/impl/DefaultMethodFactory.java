@@ -4,6 +4,7 @@ import info.reflectionsofmind.dicerobot.exception.MethodNotFoundException;
 import info.reflectionsofmind.dicerobot.method.IMethodFactory;
 import info.reflectionsofmind.dicerobot.method.IRollingMethod;
 import info.reflectionsofmind.dicerobot.method.impl.d20.D20System;
+import info.reflectionsofmind.dicerobot.method.impl.d6.D6System;
 import info.reflectionsofmind.dicerobot.method.impl.ditv.DogsInTheVineyard;
 import info.reflectionsofmind.dicerobot.method.impl.exa.Exalted;
 import info.reflectionsofmind.dicerobot.method.impl.nemesis.Nemesis;
@@ -21,13 +22,14 @@ public class DefaultMethodFactory implements IMethodFactory
 	{
 		this.methods.put("sum", new AdditiveRoll());
 		this.methods.put("d20", new D20System());
+		this.methods.put("d6", new D6System());
 		this.methods.put("ditv", new DogsInTheVineyard());
 		this.methods.put("nwod", new NewWorldOfDarkness());
 		this.methods.put("nem", new Nemesis());
 		this.methods.put("exa", new Exalted());
 	}
 	
-	public IRollingMethod createMethod(final String config) throws MethodNotFoundException
+	public IRollingMethod getMethod(final String config) throws MethodNotFoundException
 	{
 		if (!this.methods.containsKey(config))
 			throw new MethodNotFoundException(config);

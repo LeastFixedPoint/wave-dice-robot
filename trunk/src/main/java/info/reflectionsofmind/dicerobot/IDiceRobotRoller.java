@@ -10,5 +10,5 @@ public interface IDiceRobotRoller
 	List<RollRequest> extractRequests(IWritableText text);
 	
 	/** Executes roll and writes results. Does not flush output. */
-	void executeRequest(RollRequest request, IRollExecutionContext context) throws FatalException;
+	void executeRequest(RollRequest request, IRequestContext context) throws FatalException;
 }

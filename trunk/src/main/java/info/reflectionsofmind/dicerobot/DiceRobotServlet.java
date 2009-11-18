@@ -1,8 +1,11 @@
 package info.reflectionsofmind.dicerobot;
 
+import static java.util.Arrays.asList;
 import info.reflectionsofmind.dicerobot.exception.FatalException;
 import info.reflectionsofmind.dicerobot.exception.output.OutputException;
 import info.reflectionsofmind.dicerobot.method.impl.DefaultMethodFactory;
+import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
+import info.reflectionsofmind.dicerobot.output.Style;
 import info.reflectionsofmind.dicerobot.wrapper.RollRequest;
 
 import java.util.List;
@@ -21,54 +24,56 @@ import com.google.wave.api.RobotMessageBundle;
 public class DiceRobotServlet extends AbstractRobotServlet
 {
 	private static final String SIGNATURE_ANNOTATION = "dicy/signature";
-	
+
 	private static final Pattern SIGNABLE_PATTERN = Pattern.compile("\\[[^\\]*]\\]");
-	
-	public static final String BASE_URL = "http://dice-y.appspot.com";
+
+	public static final String APP_ID = "dice-robot";
+	public static final String BASE_URL = "http://" + APP_ID + ".appspot.com";
 	public static final String GADGET_URL = BASE_URL + "/gadget.jsp";
-	
-	public static final String GADGET_DEFAULT_CONFIG_KEY = "defaultRollingMethod";
-	public static final String WAVELET_DEFAULT_CONFIG_KEY = GADGET_DEFAULT_CONFIG_KEY;
-	public static final String SELF_ADDRESS = "dice-y@appspot.com";
-	
+
+	public static final String DEFAULT_METHOD_KEY = "defaultRollingMethod";
+	public static final List<String> KEYS = asList(DEFAULT_METHOD_KEY, AdditiveRoll.SUM_GROUPING_KEY);
+
+	public static final String SELF_ADDRESS = APP_ID + "@appspot.com";
+
 	private final IDiceRobotRoller robot;
 	private final String defaultConfig;
-	
+
 	public DiceRobotServlet()
 	{
 		this("sum");
 	}
-	
+
 	public DiceRobotServlet(final String defaultConfig)
 	{
 		this.defaultConfig = defaultConfig;
-		
+
 		this.robot = new DiceRobot(new DefaultMethodFactory())
 				.setMaxNumberOfRolls(10000)
 				.setMaxRequestLength(200)
 				.setMaxResultLength(200);
 	}
-	
+
 	@Override
 	public void processEvents(final RobotMessageBundle bundle)
 	{
 		if (bundle.wasSelfAdded())
 		{
 			onSelfAdded(bundle);
-			Logger.getAnonymousLogger().severe("=== Hello, world! ======================");
+			Logger.getAnonymousLogger().fine("=== Hello, world! ======================");
 		}
-		
+
 		for (final Event event : bundle.getEvents())
 		{
 			final Gadget gadget = event.getBlip().getDocument().getGadgetView().getGadget(GADGET_URL);
-			
+
 			if (gadget != null) onGadgetChanged(event, gadget);
-			
+
 			final List<RollRequest> requests = this.robot.extractRequests(new BlipDocument(event.getBlip()));
-			
+
 			for (final RollRequest request : requests)
 				onRequest(event, request);
-			
+
 			// if (event.getType() == EventType.DOCUMENT_CHANGED)
 			// {
 			// if (!event.getModifiedBy().equals(SELF_ADDRESS))
@@ -78,13 +83,13 @@ public class DiceRobotServlet extends AbstractRobotServlet
 			// }
 		}
 	}
-	
+
 	public void onRequest(final Event event, final RollRequest request)
 	{
 		try
 		{
 			request.getOutput().append(" = ");
-			
+
 			try
 			{
 				this.robot.executeRequest(request, new WaveletContext(event.getWavelet()));
@@ -93,7 +98,7 @@ public class DiceRobotServlet extends AbstractRobotServlet
 			}
 			catch (final FatalException e)
 			{
-				request.getOutput().append("fatal error").with("style/color", "red").flush();
+				request.getOutput().append("fatal error").with(Style.RED).flush();
 				throw new RuntimeException(e);
 			}
 		}
@@ -102,33 +107,36 @@ public class DiceRobotServlet extends AbstractRobotServlet
 			throw new RuntimeException(e1);
 		}
 	}
-	
+
 	public void onGadgetChanged(final Event event, final Gadget gadget)
 	{
-		final String newDefaultConfig = gadget.getField(GADGET_DEFAULT_CONFIG_KEY);
-		event.getWavelet().setDataDocument(WAVELET_DEFAULT_CONFIG_KEY, newDefaultConfig);
+		for (final String key : KEYS)
+		{
+			final String newValue = gadget.getField(key);
+			event.getWavelet().setDataDocument(key, newValue);
+		}
 	}
-	
+
 	public void onSelfAdded(final RobotMessageBundle bundle)
 	{
 		final Blip homeBlip = bundle.getWavelet().appendBlip();
 		homeBlip.getDocument().append("Hello, I'm Dicy!");
 		final Gadget gadget = new Gadget(GADGET_URL);
 		homeBlip.getDocument().getGadgetView().append(gadget);
-		gadget.setField(GADGET_DEFAULT_CONFIG_KEY, this.defaultConfig);
+		gadget.setField(DEFAULT_METHOD_KEY, this.defaultConfig);
 	}
-	
+
 	/** Updates all signatures in the blip to be correct. */
 	public static void updateSignatures(final Blip blip)
 	{
 		final Matcher matcher = SIGNABLE_PATTERN.matcher(blip.getDocument().getText());
-		
+
 		while (matcher.find())
 		{
 			final Range range = new Range(matcher.start(), matcher.end());
 			final List<Annotation> annotations = blip.getDocument().getAnnotations(range);
 			boolean hasSignature = false;
-			
+
 			for (final Annotation annotation : annotations)
 			{
 				if (annotation.getName().equals(SIGNATURE_ANNOTATION))
@@ -137,7 +145,7 @@ public class DiceRobotServlet extends AbstractRobotServlet
 					hasSignature = true;
 				}
 			}
-			
+
 			if (!hasSignature)
 			{
 				blip.getDocument().setAnnotation(range, SIGNATURE_ANNOTATION, matcher.group());
@@ -145,17 +153,17 @@ public class DiceRobotServlet extends AbstractRobotServlet
 			}
 		}
 	}
-	
+
 	/** Verifies that all signatures in the blip are correct. */
 	public static void verifySignatures(final Blip blip)
 	{
 		final Matcher matcher = SIGNABLE_PATTERN.matcher(blip.getDocument().getText());
-		
+
 		while (matcher.find())
 		{
 			final Range range = new Range(matcher.start(), matcher.end());
 			final List<Annotation> annotations = blip.getDocument().getAnnotations(range);
-			
+
 			for (final Annotation annotation : annotations)
 			{
 				if (annotation.getName().equals(SIGNATURE_ANNOTATION))
@@ -169,7 +177,7 @@ public class DiceRobotServlet extends AbstractRobotServlet
 			}
 		}
 	}
-	
+
 	public static boolean verifySignature(final String text, final String signature)
 	{
 		return text.equals(signature);

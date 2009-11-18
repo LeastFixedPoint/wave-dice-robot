@@ -37,9 +37,11 @@ public class DocumentWriter implements IFormattedBufferedOutput
 	}
 	
 	@Override
-	public DocumentWriter with(final String annotation, final String value)
+	public DocumentWriter with(final IStyle style)
 	{
-		this.annotations.add(new Annotation(annotation, value, new Range(this.previous, this.position)));
+		this.annotations.add(new Annotation(style.getName(), style.getValue(), // 
+				new Range(this.previous, this.position)));
+		
 		return this;
 	}
 	

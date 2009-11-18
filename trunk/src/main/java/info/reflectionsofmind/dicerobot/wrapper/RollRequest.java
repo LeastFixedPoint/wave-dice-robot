@@ -5,13 +5,13 @@ import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
 public class RollRequest
 {
 	private final IFormattedBufferedOutput output;
-	private final String config;
+	private final String methodCode;
 	private final String request;
 	
-	public RollRequest(final IFormattedBufferedOutput output, final String config, final String request)
+	public RollRequest(final IFormattedBufferedOutput output, final String methodCode, final String request)
 	{
 		this.output = output;
-		this.config = config;
+		this.methodCode = methodCode;
 		this.request = request;
 	}
 	
@@ -20,9 +20,9 @@ public class RollRequest
 		return this.output;
 	}
 	
-	public String getConfig()
+	public String getMethodCode()
 	{
-		return this.config;
+		return this.methodCode;
 	}
 	
 	public String getRequest()

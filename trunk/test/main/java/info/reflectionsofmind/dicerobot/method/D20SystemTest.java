@@ -1,7 +1,7 @@
 package info.reflectionsofmind.dicerobot.method;
 
 import static info.reflectionsofmind.dicerobot.TestingUtil.assertWrite;
-import static info.reflectionsofmind.dicerobot.TestingUtil.mockDieRollerFactory;
+import static info.reflectionsofmind.dicerobot.TestingUtil.mockRolls;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -37,7 +37,7 @@ public class D20SystemTest
 	@Test
 	public void shouldRollSixAbilityValues() throws Exception
 	{
-		final D20Roller roller = new D20Roller(mockDieRollerFactory(1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6));
+		final D20Roller roller = new D20Roller(mockRolls(1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6));
 		final D20Result.CharGen result = (D20Result.CharGen) roller.makeRoll(new D20Request.CharGen());
 		assertEquals(Arrays.asList(9, 13, 15, 9, 13, 15), result.getValues());
 	}
@@ -45,7 +45,7 @@ public class D20SystemTest
 	@Test
 	public void shouldRollSumOfAllRolls() throws Exception
 	{
-		final D20Roller roller = new D20Roller(mockDieRollerFactory(5, 3, 6));
+		final D20Roller roller = new D20Roller(mockRolls(5, 3, 6));
 		final D20Request.SumAllRolls request = new D20Request.SumAllRolls(new SumRequest().add(3, 6).add(5));
 		
 		final D20Result.SumAllRolls result = (D20Result.SumAllRolls) roller.makeRoll(request);

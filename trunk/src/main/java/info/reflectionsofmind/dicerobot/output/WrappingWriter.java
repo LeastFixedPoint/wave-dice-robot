@@ -23,9 +23,9 @@ public class WrappingWriter implements IFormattedBufferedOutput
 	}
 	
 	@Override
-	public WrappingWriter with(final String annotation, final String value)
+	public WrappingWriter with(final IStyle style)
 	{
-		this.actions.add(new With(annotation, value));
+		this.actions.add(new With(style));
 		return this;
 	}
 	
@@ -68,19 +68,17 @@ public class WrappingWriter implements IFormattedBufferedOutput
 	
 	private static final class With extends Action
 	{
-		private final String annotation;
-		private final String value;
+		private final IStyle style;
 		
-		public With(final String annotation, final String value)
+		public With(final IStyle style)
 		{
-			this.annotation = annotation;
-			this.value = value;
+			this.style = style;
 		}
 		
 		@Override
 		void flush(final IFormattedBufferedOutput output) throws OutputException
 		{
-			output.with(this.annotation, this.value);
+			output.with(this.style);
 		}
 	}
 }

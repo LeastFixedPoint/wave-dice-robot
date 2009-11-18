@@ -1,26 +1,25 @@
-package info.reflectionsofmind.dicerobot.method;
+package info.reflectionsofmind.dicerobot;
 
 import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
+import info.reflectionsofmind.dicerobot.output.IStyle;
 
 public class MockOutput implements IFormattedBufferedOutput
 {
 	private final StringBuilder builder = new StringBuilder();
+	private int position = 0;
 	
-	public IFormattedBufferedOutput append(final Object object)
+	public MockOutput append(final Object object)
 	{
-		this.builder.append(object);
-		return this;
-	}
-	
-	public IFormattedBufferedOutput append(final Object object, final String annotation, final String value)
-	{
+		this.position = this.builder.length();
 		this.builder.append(object);
 		return this;
 	}
 	
 	@Override
-	public IFormattedBufferedOutput with(final String annotation, final String value)
+	public MockOutput with(final IStyle style)
 	{
+		this.builder.insert(this.position, "<" + style.getCode() + ">");
+		this.builder.append("</" + style.getCode() + ">");
 		return this;
 	}
 	

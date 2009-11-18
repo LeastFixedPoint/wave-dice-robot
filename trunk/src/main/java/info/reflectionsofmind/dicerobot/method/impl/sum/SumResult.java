@@ -4,7 +4,7 @@ import static java.util.Arrays.asList;
 import info.reflectionsofmind.dicerobot.method.impl.AbstractRollResult;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class SumResult extends AbstractRollResult<SumRequest>
 {
-	private final Map<SumRequest.Roll, List<Integer>> results = new HashMap<SumRequest.Roll, List<Integer>>();
+	private final Map<SumRequest.Roll, List<Integer>> results = new IdentityHashMap<SumRequest.Roll, List<Integer>>();
 	
 	public SumResult(final SumRequest request)
 	{
