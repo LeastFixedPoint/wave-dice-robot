@@ -1,6 +1,5 @@
 package info.reflectionsofmind.dicerobot.output;
 
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -27,7 +26,7 @@ public class WrappingWriterTest
 		final IFormattedBufferedOutput output = mock(IFormattedBufferedOutput.class);
 		final WrappingWriter writer = new WrappingWriter(output);
 		
-		writer.append("test").with("style/color", "red");
+		writer.append("test").with(Style.RED);
 		
 		verifyZeroInteractions(output);
 	}
@@ -38,16 +37,13 @@ public class WrappingWriterTest
 		final IFormattedBufferedOutput output = mock(IFormattedBufferedOutput.class);
 		final WrappingWriter writer = new WrappingWriter(output);
 		
-		writer
-				.append("first").with("style/color", "red")
-				.append("second").with("style/color", "blue").with("style/fontWidth", "bold")
-				.flush();
+		writer.append("first").with(Style.RED).append("second").with(Style.GREEN).with(Style.BOLD).flush();
 		
-		verify(output).append(eq("first"));
-		verify(output).with(eq("style/color"), eq("red"));
-		verify(output).append(eq("second"));
-		verify(output).with(eq("style/color"), eq("blue"));
-		verify(output).with(eq("style/fontWidth"), eq("bold"));
+		verify(output).append("first");
+		verify(output).with(Style.RED);
+		verify(output).append("second");
+		verify(output).with(Style.GREEN);
+		verify(output).with(Style.BOLD);
 		verifyNoMoreInteractions(output);
 	}
 }

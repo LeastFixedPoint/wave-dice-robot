@@ -1,7 +1,7 @@
 package info.reflectionsofmind.dicerobot.method;
 
 import static info.reflectionsofmind.dicerobot.TestingUtil.assertWrite;
-import static info.reflectionsofmind.dicerobot.TestingUtil.mockDieRollerFactory;
+import static info.reflectionsofmind.dicerobot.TestingUtil.mockRolls;
 import static org.junit.Assert.assertEquals;
 import info.reflectionsofmind.dicerobot.method.impl.RollResult;
 import info.reflectionsofmind.dicerobot.method.impl.ditv.DitvParser;
@@ -28,7 +28,7 @@ public class DogsInTheVineyardTest
 	@Test
 	public void shouldRollRequests() throws Exception
 	{
-		final IRollRoller<DitvRequest, DitvResult> roller = new DitvRoller(mockDieRollerFactory(2, 6, 4, 9));
+		final IRollRoller<DitvRequest, DitvResult> roller = new DitvRoller(mockRolls(2, 6, 4, 9));
 		final DitvResult result = roller.makeRoll(new DitvRequest().add(2, 6).add(2, 10));
 		assertEquals(Arrays.asList(new RollResult(2, 6), new RollResult(6, 6), new RollResult(4, 10), new RollResult(9, 10)), result.getResults());
 	}
@@ -37,6 +37,7 @@ public class DogsInTheVineyardTest
 	public void shouldWriteResults() throws Exception
 	{
 		final DitvWriter writer = new DitvWriter();
-		assertWrite(writer, new DitvResult(null).add(6, 2, 6).add(10, 4, 9), "910 66 410 26");
+		assertWrite(writer, new DitvResult(null).add(6, 2, 6).add(10, 4, 9),
+				"<xb>9</xb><xs>10</xs> <xb>6</xb><xs>6</xs> <xb>4</xb><xs>10</xs> <xb>2</xb><xs>6</xs>");
 	}
 }

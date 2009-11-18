@@ -1,7 +1,7 @@
 package info.reflectionsofmind.dicerobot.method;
 
 import static info.reflectionsofmind.dicerobot.TestingUtil.assertWrite;
-import static info.reflectionsofmind.dicerobot.TestingUtil.mockDieRollerFactory;
+import static info.reflectionsofmind.dicerobot.TestingUtil.mockRolls;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -91,7 +91,7 @@ public class ExaltedTest
 	public void shouldRollPools() throws Exception
 	{
 		final ExaRequest request = new ExaRequest().add(3, 6).add(2);
-		final ExaResult result = new ExaRoller(mockDieRollerFactory(4, 6, 2, 8, 3)).makeRoll(request);
+		final ExaResult result = new ExaRoller(mockRolls(4, 6, 2, 8, 3)).makeRoll(request);
 		assertEquals(new ExaResult(request).add(6, 4, 6, 2).add(7, 8, 3), result);
 	}
 	
@@ -100,7 +100,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(3);
 		final ExaResult result = new ExaResult(request).add(7, 2, 7, 9);
-		assertWrite(new ExaWriter(), result, "2 7 9 = success +1");
+		assertWrite(new ExaWriter(), result, //
+				"<red>2</red> <green>7</green> <green>9</green> = <green><xb>success +1</xb></green>");
 	}
 	
 	@Test
@@ -108,7 +109,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(3, 6);
 		final ExaResult result = new ExaResult(request).add(6, 5, 6, 7);
-		assertWrite(new ExaWriter(), result, "5 6 7 = success +1");
+		assertWrite(new ExaWriter(), result,
+				"<red>5</red> <green>6</green> <green>7</green> = <green><xb>success +1</xb></green>");
 	}
 	
 	@Test
@@ -116,7 +118,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(3).difficulty(2);
 		final ExaResult result = new ExaResult(request).add(7, 7, 7, 9);
-		assertWrite(new ExaWriter(), result, "7 7 9 = success +1");
+		assertWrite(new ExaWriter(), result,
+				"<green>7</green> <green>7</green> <green>9</green> = <green><xb>success +1</xb></green>");
 	}
 	
 	@Test
@@ -124,7 +127,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(3);
 		final ExaResult result = new ExaResult(request).add(7, 2, 4, 9);
-		assertWrite(new ExaWriter(), result, "2 4 9 = success");
+		assertWrite(new ExaWriter(), result,
+				"<red>2</red> <red>4</red> <green>9</green> = <green><xb>success</xb></green>");
 	}
 	
 	@Test
@@ -132,7 +136,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(1);
 		final ExaResult result = new ExaResult(request).add(7, 10);
-		assertWrite(new ExaWriter(), result, "10 = success +1");
+		assertWrite(new ExaWriter(), result,
+				"<green>10</green> = <green><xb>success +1</xb></green>");
 	}
 	
 	@Test
@@ -140,7 +145,7 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(1);
 		final ExaResult result = new ExaResult(request).add(7, 6);
-		assertWrite(new ExaWriter(), result, "6 = failure -1");
+		assertWrite(new ExaWriter(), result, "<red>6</red> = <xb>failure -1</xb>");
 	}
 	
 	@Test
@@ -148,7 +153,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(3).difficulty(2);
 		final ExaResult result = new ExaResult(request).add(7, 5, 6, 7);
-		assertWrite(new ExaWriter(), result, "5 6 7 = failure -1");
+		assertWrite(new ExaWriter(), result,
+				"<red>5</red> <red>6</red> <green>7</green> = <xb>failure -1</xb>");
 	}
 	
 	@Test
@@ -156,7 +162,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(3).difficulty(3);
 		final ExaResult result = new ExaResult(request).add(7, 5, 6, 10);
-		assertWrite(new ExaWriter(), result, "5 6 10 = failure -1");
+		assertWrite(new ExaWriter(), result,
+				"<red>5</red> <red>6</red> <green>10</green> = <xb>failure -1</xb>");
 	}
 	
 	@Test
@@ -164,7 +171,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(2);
 		final ExaResult result = new ExaResult(request).add(7, 1, 3);
-		assertWrite(new ExaWriter(), result, "1 3 = BOTCH");
+		assertWrite(new ExaWriter(), result,
+				"<red>1</red> <red>3</red> = <red><xb>BOTCH</xb></red>");
 	}
 	
 	@Test
@@ -172,7 +180,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(2);
 		final ExaResult result = new ExaResult(request).add(7, 1, 7);
-		assertWrite(new ExaWriter(), result, "1 7 = success");
+		assertWrite(new ExaWriter(), result,
+				"<red>1</red> <green>7</green> = <green><xb>success</xb></green>");
 	}
 	
 	@Test
@@ -180,7 +189,8 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(2);
 		final ExaResult result = new ExaResult(request).add(7, 2, 3);
-		assertWrite(new ExaWriter(), result, "2 3 = failure -1");
+		assertWrite(new ExaWriter(), result,
+				"<red>2</red> <red>3</red> = <xb>failure -1</xb>");
 	}
 	
 	@Test
@@ -188,6 +198,7 @@ public class ExaltedTest
 	{
 		final ExaRequest request = new ExaRequest().add(1).explodeTens(false);
 		final ExaResult result = new ExaResult(request).add(7, 10);
-		assertWrite(new ExaWriter(), result, "10 = success");
+		assertWrite(new ExaWriter(), result,
+				"<green>10</green> = <green><xb>success</xb></green>");
 	}
 }

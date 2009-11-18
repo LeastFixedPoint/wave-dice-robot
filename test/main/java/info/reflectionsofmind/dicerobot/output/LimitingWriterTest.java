@@ -1,8 +1,8 @@
 package info.reflectionsofmind.dicerobot.output;
 
+import info.reflectionsofmind.dicerobot.MockOutput;
 import info.reflectionsofmind.dicerobot.exception.output.OutputException;
 import info.reflectionsofmind.dicerobot.exception.output.OutputLengthLimitExceededException;
-import info.reflectionsofmind.dicerobot.method.MockOutput;
 
 import org.junit.Test;
 

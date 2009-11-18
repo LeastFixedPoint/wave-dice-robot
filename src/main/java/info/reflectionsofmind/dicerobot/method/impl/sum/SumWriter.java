@@ -4,18 +4,12 @@ import static java.lang.Math.abs;
 import info.reflectionsofmind.dicerobot.exception.CannotRenderRollException;
 import info.reflectionsofmind.dicerobot.exception.output.OutputException;
 import info.reflectionsofmind.dicerobot.method.IRollWriter;
+import info.reflectionsofmind.dicerobot.method.impl.sum.SumConfig.Grouping;
 import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
 
 public class SumWriter implements IRollWriter<SumResult>
 {
-	public enum CollapseMode
-	{
-		NONE, // 3d6+2 = 6 + 3 + 5 + 2 = 16
-		GROUPS, // 3d6+2 = 14 + 2 = 16
-		ALL, // 3d6+2 = 16
-	}
-	
-	private CollapseMode collapseMode = CollapseMode.GROUPS;
+	private Grouping collapseMode = Grouping.GROUPED;
 	
 	@Override
 	public void render(final IFormattedBufferedOutput output, final SumResult result) throws CannotRenderRollException
@@ -34,7 +28,7 @@ public class SumWriter implements IRollWriter<SumResult>
 			{
 				if (token instanceof SumRequest.Number)
 				{
-					if (this.collapseMode != CollapseMode.ALL)
+					if (this.collapseMode != Grouping.RESULT)
 						write(output, writtenValues++, ((SumRequest.Number) token).getNumber());
 					
 					sum += ((SumRequest.Number) token).getNumber();
@@ -45,13 +39,13 @@ public class SumWriter implements IRollWriter<SumResult>
 					
 					for (final Integer value : result.getResults((SumRequest.Roll) token))
 					{
-						if (this.collapseMode == CollapseMode.NONE)
+						if (this.collapseMode == Grouping.EXPANDED)
 							write(output, writtenValues++, value);
 						
 						groupSum += value;
 					}
 					
-					if (this.collapseMode == CollapseMode.GROUPS)
+					if (this.collapseMode == Grouping.GROUPED)
 						write(output, writtenValues++, groupSum);
 					
 					sum += groupSum;
@@ -62,7 +56,7 @@ public class SumWriter implements IRollWriter<SumResult>
 				}
 			}
 			
-			if (this.collapseMode == CollapseMode.ALL)
+			if (this.collapseMode == Grouping.RESULT)
 			{
 				output.append(sum);
 				return;
@@ -103,7 +97,7 @@ public class SumWriter implements IRollWriter<SumResult>
 		}
 	}
 	
-	public SumWriter setCollapseMode(final CollapseMode collapseMode)
+	public SumWriter setCollapseMode(final Grouping collapseMode)
 	{
 		this.collapseMode = collapseMode;
 		return this;

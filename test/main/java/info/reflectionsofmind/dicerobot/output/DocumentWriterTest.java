@@ -45,7 +45,7 @@ public class DocumentWriterTest
 		final TextView textView = mock(TextView.class);
 		final DocumentWriter writer = new DocumentWriter(textView, 0);
 		
-		writer.append("test").with("style/color", "red");
+		writer.append("test").with(Style.RED);
 		
 		verifyZeroInteractions(textView);
 	}
@@ -56,7 +56,7 @@ public class DocumentWriterTest
 		final TextView textView = mock(TextView.class);
 		final DocumentWriter writer = new DocumentWriter(textView, 10);
 		
-		writer.append("test").with("style/color", "red").flush();
+		writer.append("test").with(Style.RED).flush();
 		
 		verify(textView).setAnnotation(eq(new Range(10, 14)), eq("style/color"), eq("red"));
 		verify(textView, atMost(1)).setAnnotation(any(Range.class), anyString(), anyString());
@@ -68,7 +68,7 @@ public class DocumentWriterTest
 		final TextView textView = mock(TextView.class);
 		final DocumentWriter writer = new DocumentWriter(textView, 10);
 		
-		writer.append("before").append("test").with("style/color", "red").append("after").flush();
+		writer.append("before").append("test").with(Style.RED).append("after").flush();
 		
 		verify(textView).setAnnotation(eq(new Range(16, 20)), eq("style/color"), eq("red"));
 		verify(textView, atMost(1)).setAnnotation(any(Range.class), anyString(), anyString());

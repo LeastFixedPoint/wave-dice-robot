@@ -2,14 +2,21 @@ package info.reflectionsofmind.dicerobot;
 
 import static info.reflectionsofmind.dicerobot.TestingUtil.replicate;
 import static java.util.Arrays.asList;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.matches;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import info.reflectionsofmind.dicerobot.method.impl.sum.AdditiveRoll;
+
+import java.util.Map;
 
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import com.google.appengine.repackaged.com.google.common.collect.Maps;
 import com.google.wave.api.Blip;
 import com.google.wave.api.Event;
 import com.google.wave.api.Gadget;
@@ -31,7 +38,21 @@ public class ServletTest
 		final Wavelet wavelet = mock(Wavelet.class);
 		
 		when(event.getWavelet()).thenReturn(wavelet);
-		when(wavelet.getDataDocument(eq(DiceRobotServlet.WAVELET_DEFAULT_CONFIG_KEY))).thenReturn(defaultMethod);
+		
+		final Map<String, String> data = Maps.immutableMap(
+				DiceRobotServlet.DEFAULT_METHOD_KEY, defaultMethod,
+				AdditiveRoll.SUM_GROUPING_KEY, "grouped");
+		
+		when(wavelet.getDataDocuments()).thenReturn(data);
+		
+		when(wavelet.getDataDocument(anyString())).thenAnswer(new Answer<String>()
+						{
+			public String answer(final InvocationOnMock invocation) throws Throwable
+							{
+				return data.get(invocation.getArguments()[0]);
+			}
+		});
+		
 		when(textView.getText()).thenReturn(blipText);
 		when(textView.getGadgetView()).thenReturn(gadgetView);
 		when(blip.getDocument()).thenReturn(textView);
@@ -51,7 +72,7 @@ public class ServletTest
 		final Gadget gadget = mock(Gadget.class);
 		final Wavelet wavelet = mock(Wavelet.class);
 		
-		when(gadget.getField(eq(DiceRobotServlet.GADGET_DEFAULT_CONFIG_KEY))).thenReturn(newMethod);
+		when(gadget.getField(eq(DiceRobotServlet.DEFAULT_METHOD_KEY))).thenReturn(newMethod);
 		when(gadgetView.getGadget(eq(DiceRobotServlet.GADGET_URL))).thenReturn(gadget);
 		when(textView.getGadgetView()).thenReturn(gadgetView);
 		when(textView.getText()).thenReturn("");
@@ -96,7 +117,7 @@ public class ServletTest
 		
 		servlet.processEvents(bundle);
 		
-		verify(wavelet).setDataDocument(eq(DiceRobotServlet.WAVELET_DEFAULT_CONFIG_KEY), eq("ditv"));
+		verify(wavelet).setDataDocument(eq(DiceRobotServlet.DEFAULT_METHOD_KEY), eq("ditv"));
 	}
 	
 	@Test

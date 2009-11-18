@@ -1,21 +1,15 @@
 package info.reflectionsofmind.dicerobot.method.impl;
 
-import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
-import info.reflectionsofmind.dicerobot.diceroller.RandomBasedDieRollerFactory;
+import info.reflectionsofmind.dicerobot.method.IRollConfig;
 import info.reflectionsofmind.dicerobot.method.IRollingMethod;
+
+import java.util.Map;
 
 public abstract class AbstractRollingMethod implements IRollingMethod
 {
-	private IDieRollerFactory factory = new RandomBasedDieRollerFactory();
-	
-	public IRollingMethod setDieRollerFactory(final IDieRollerFactory factory)
+	@Override
+	public IRollConfig createConfig(final Map<String, String> map)
 	{
-		this.factory = factory;
-		return this;
-	}
-	
-	public IDieRollerFactory getDieRollerFactory()
-	{
-		return this.factory;
+		return null;
 	}
 }

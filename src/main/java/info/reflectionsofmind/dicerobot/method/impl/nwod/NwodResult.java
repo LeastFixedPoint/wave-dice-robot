@@ -27,7 +27,7 @@ public final class NwodResult extends AbstractRollResult<NwodRequest>
 		return this;
 	}
 	
-	public List<Integer> getResults()
+	public List<Integer> getRolls()
 	{
 		return this.results;
 	}

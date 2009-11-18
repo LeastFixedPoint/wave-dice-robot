@@ -1,46 +1,40 @@
 package info.reflectionsofmind.dicerobot.method.impl.d6;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRoller;
+import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
 import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
-import info.reflectionsofmind.dicerobot.method.impl.AbstractRollRoller2;
-import info.reflectionsofmind.dicerobot.method.impl.d6.D6Request.Die;
-import info.reflectionsofmind.dicerobot.method.impl.d6.D6Request.Token;
-import info.reflectionsofmind.dicerobot.method.impl.d6.D6Request.Wild;
+import info.reflectionsofmind.dicerobot.method.impl.AbstractRollRoller;
 
-public class D6Roller extends AbstractRollRoller2<D6Request, D6Result>
+public class D6Roller extends AbstractRollRoller<D6Request, D6Result>
 {
-	public D6Roller()
+	public D6Roller(final IDieRollerFactory factory)
 	{
-		super(D6Request.class, D6Result.class);
+		super(factory);
 	}
 	
 	@Override
-	protected void doMakeRoll(final D6Request request, final D6Result result, final IDieRoller roller) throws CannotMakeRollException
+	public D6Result makeRoll(final D6Request request) throws CannotMakeRollException
 	{
-		for (final Token token : request.getTokens())
+		final D6Result result = new D6Result(request);
+		final IDieRoller roller = createDieRoller();
+		
+		for (int i = 0; i < result.getRequest().getNumberOfDice() - 1; ++i)
+			result.addDice(roller.roll(6));
+		
+		int roll = roller.roll(6);
+		result.addWild(roll);
+		
+		if (roll == 1)
 		{
-			if (token instanceof Die)
-			{
-				for (int i = 0; i < token.getValue(); i++)
-					result.add((Die) token, roller.roll(6));
-			}
-			else if (token instanceof Wild)
-			{
-				int roll = roller.roll(6);
-				result.add((Wild) token, roll);
-				
-				if (roll == 1)
-				{
-					final int nextRoll = roller.roll(6);
-					result.add((Wild) token, nextRoll);
-				}
-				
-				while (roll == 6)
-				{
-					roll = roller.roll(6);
-					result.add((Wild) token, roll);
-				}
-			}
+			result.addWild(roller.roll(6));
 		}
+		
+		while (roll == 6)
+		{
+			roll = roller.roll(6);
+			result.addWild(roll);
+		}
+		
+		return result;
 	}
 }
