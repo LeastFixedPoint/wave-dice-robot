@@ -14,31 +14,42 @@ public class LimitsTest
 	{
 		final DiceRobot robot = new DiceRobot(new DefaultMethodFactory()).setMaxRequestLength(4);
 		final MockOutput output = new MockOutput();
-		
+
 		robot.executeRequest(new RollRequest(output, "sum", "2d6+5"), null);
-		
+
 		assertEquals("<red>request too long (max 4)</red>", output.getString());
 	}
-	
+
 	@Test
 	public void shouldNotAllowTooLongResults() throws Exception
 	{
 		final DiceRobot robot = new DiceRobot(new DefaultMethodFactory()).setMaxResultLength(4);
 		final MockOutput output = new MockOutput();
-		
+
 		robot.executeRequest(new RollRequest(output, "sum", "1+2+3"), mock(IRequestContext.class));
-		
+
 		assertEquals("<red>result too long (max 4)</red>", output.getString());
 	}
-	
+
 	@Test
 	public void shouldNotAllowTooManyRolls() throws Exception
 	{
 		final DiceRobot robot = new DiceRobot(new DefaultMethodFactory()).setMaxNumberOfRolls(3);
 		final MockOutput output = new MockOutput();
-		
+
 		robot.executeRequest(new RollRequest(output, "sum", "2d6+2d8"), mock(IRequestContext.class));
-		
+
 		assertEquals("<red>too many rolls (max 3)</red>", output.getString());
+	}
+
+	@Test
+	public void shouldNotAllowNumbersTooLong() throws Exception
+	{
+		final DiceRobot robot = new DiceRobot(new DefaultMethodFactory()).setMaxNumberOfRolls(3);
+		final MockOutput output = new MockOutput();
+
+		robot.executeRequest(new RollRequest(output, "sum", "100d9999999999999999"), mock(IRequestContext.class));
+
+		assertEquals("<red>invalid number</red>", output.getString());
 	}
 }
