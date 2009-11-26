@@ -27,7 +27,7 @@ public class DiceRobotServlet extends AbstractRobotServlet
 
 	private static final Pattern SIGNABLE_PATTERN = Pattern.compile("\\[[^\\]*]\\]");
 
-	public static final String APP_ID = "dice-robot";
+	public static final String APP_ID = "dice-y";
 	public static final String BASE_URL = "http://" + APP_ID + ".appspot.com";
 	public static final String GADGET_URL = BASE_URL + "/gadget.jsp";
 

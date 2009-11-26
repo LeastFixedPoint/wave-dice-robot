@@ -1,5 +1,6 @@
 package info.reflectionsofmind.dicerobot;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -141,5 +142,10 @@ public class RobotTest
 		when(context.getConfig(any(IRollingMethod.class))).thenReturn(new SumConfig(Grouping.GROUPED));
 		robot.executeRequest(request, context);
 		assertEquals("<red>too many rolls (max 10)</red>", output.getString());
+	}
+
+	@Test
+	public void sandbox() throws Exception
+	{
 	}
 }

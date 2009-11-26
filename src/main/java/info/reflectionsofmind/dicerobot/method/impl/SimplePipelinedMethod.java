@@ -1,6 +1,7 @@
 package info.reflectionsofmind.dicerobot.method.impl;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
+import info.reflectionsofmind.dicerobot.exception.CannotParseRollException;
 import info.reflectionsofmind.dicerobot.exception.CannotRenderRollException;
 import info.reflectionsofmind.dicerobot.exception.UserReadableException;
 import info.reflectionsofmind.dicerobot.exception.output.OutputException;
@@ -17,9 +18,19 @@ public abstract class SimplePipelinedMethod<TRollParser extends IRollParser<TRol
 	@Override
 	public final void writeResult(final IDieRollerFactory factory, final IRollConfig config, final String input, final IFormattedBufferedOutput output) throws UserReadableException
 	{
-		final TRollRequest request = createParser(config).parse(input);
+		final TRollRequest request;
+
+		try
+		{
+			request = createParser(config).parse(input);
+		}
+		catch (final NumberFormatException exception)
+		{
+			throw new CannotParseRollException("invalid number");
+		}
+
 		final TRollResult result = createRoller(config, factory).makeRoll(request);
-		
+
 		try
 		{
 			createWriter(config).render(output, result);
@@ -29,10 +40,10 @@ public abstract class SimplePipelinedMethod<TRollParser extends IRollParser<TRol
 			throw CannotRenderRollException.wrap(exception);
 		}
 	}
-	
+
 	abstract protected TRollParser createParser(IRollConfig config);
-	
+
 	abstract protected TRollRoller createRoller(IRollConfig config, IDieRollerFactory factory);
-	
+
 	abstract protected TRollWriter createWriter(IRollConfig config);
 }
