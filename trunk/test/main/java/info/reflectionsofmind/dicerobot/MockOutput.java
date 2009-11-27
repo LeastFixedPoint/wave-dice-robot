@@ -27,7 +27,7 @@ public class MockOutput implements IFormattedBufferedOutput
 	{
 	}
 	
-	public String getString()
+	public String getFormatted()
 	{
 		return this.builder.toString();
 	}

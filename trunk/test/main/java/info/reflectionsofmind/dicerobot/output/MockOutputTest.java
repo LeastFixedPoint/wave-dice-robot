@@ -11,6 +11,6 @@ public class MockOutputTest
 	public void shouldWriteStyledText() throws Exception
 	{
 		final MockOutput output = new MockOutput().append("one").append("two").with(Style.BOLD).with(Style.RED).append("three").with(Style.GREEN).append("four");
-		assertEquals("one<red><b>two</b></red><green>three</green>four", output.getString());
+		assertEquals("one<red><b>two</b></red><green>three</green>four", output.getFormatted());
 	}
 }

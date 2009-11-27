@@ -17,7 +17,7 @@ public class LimitsTest
 
 		robot.executeRequest(new RollRequest(output, "sum", "2d6+5"), null);
 
-		assertEquals("<red>request too long (max 4)</red>", output.getString());
+		assertEquals("<red>request too long (max 4)</red>", output.getFormatted());
 	}
 
 	@Test
@@ -28,7 +28,7 @@ public class LimitsTest
 
 		robot.executeRequest(new RollRequest(output, "sum", "1+2+3"), mock(IRequestContext.class));
 
-		assertEquals("<red>result too long (max 4)</red>", output.getString());
+		assertEquals("<red>result too long (max 4)</red>", output.getFormatted());
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class LimitsTest
 
 		robot.executeRequest(new RollRequest(output, "sum", "2d6+2d8"), mock(IRequestContext.class));
 
-		assertEquals("<red>too many rolls (max 3)</red>", output.getString());
+		assertEquals("<red>too many rolls (max 3)</red>", output.getFormatted());
 	}
 
 	@Test
@@ -50,6 +50,6 @@ public class LimitsTest
 
 		robot.executeRequest(new RollRequest(output, "sum", "100d9999999999999999"), mock(IRequestContext.class));
 
-		assertEquals("<red>invalid number</red>", output.getString());
+		assertEquals("<red>invalid number</red>", output.getFormatted());
 	}
 }

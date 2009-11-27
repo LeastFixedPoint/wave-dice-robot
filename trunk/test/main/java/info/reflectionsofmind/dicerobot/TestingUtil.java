@@ -27,7 +27,7 @@ public class TestingUtil
 	{
 		final MockOutput writer = new MockOutput();
 		rollWriter.render(writer, rollResult);
-		assertEquals(expectedTextOutput, writer.getString());
+		assertEquals(expectedTextOutput, writer.getFormatted());
 	}
 	
 	public static String replicate(final int count, final String string)
