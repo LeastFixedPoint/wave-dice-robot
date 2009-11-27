@@ -119,7 +119,7 @@ public class RobotTest
 		final MockOutput output = new MockOutput();
 		final RollRequest request = new RollRequest(output, "sum", "12345678901");
 		robot.executeRequest(request, null);
-		assertEquals("<red>request too long (max 10)</red>", output.getString());
+		assertEquals("<red>request too long (max 10)</red>", output.getFormatted());
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class RobotTest
 		final MockOutput output = new MockOutput();
 		final RollRequest request = new RollRequest(output, "sum", "d6+d6");
 		robot.executeRequest(request, null);
-		assertEquals("<red>result too long (max 2)</red>", output.getString());
+		assertEquals("<red>result too long (max 2)</red>", output.getFormatted());
 	}
 
 	@Test
@@ -141,7 +141,7 @@ public class RobotTest
 		final IRequestContext context = mock(IRequestContext.class);
 		when(context.getConfig(any(IRollingMethod.class))).thenReturn(new SumConfig(Grouping.GROUPED));
 		robot.executeRequest(request, context);
-		assertEquals("<red>too many rolls (max 10)</red>", output.getString());
+		assertEquals("<red>too many rolls (max 10)</red>", output.getFormatted());
 	}
 
 	@Test

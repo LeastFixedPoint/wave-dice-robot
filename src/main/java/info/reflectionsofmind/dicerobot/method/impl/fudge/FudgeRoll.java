@@ -19,7 +19,15 @@ public class FudgeRoll extends AbstractRoll<FudgeConfig>
 	@Override
 	protected void parse(final String input) throws CannotParseRollException
 	{
-		this.numberOfDice = Integer.parseInt(input);
+		if (input.endsWith("dF"))
+			this.numberOfDice = Integer.parseInt(input.substring(0, input.length() - 2));
+		else if (input.equalsIgnoreCase("f"))
+			this.numberOfDice = 4;
+		else
+			this.numberOfDice = Integer.parseInt(input);
+
+		if (this.numberOfDice <= 0)
+			throw new CannotParseRollException("can roll only positive number of dice");
 	}
 
 	@Override
@@ -38,6 +46,8 @@ public class FudgeRoll extends AbstractRoll<FudgeConfig>
 	@Override
 	protected void write(final IFormattedBufferedOutput output) throws CannotRenderRollException, OutputException
 	{
+		final Grouping grouping = getGrouping();
+
 		if (getConfig().getGrouping() == Grouping.EXPAND)
 		{
 			final JoiningWriter joiner = new JoiningWriter(output, " ");
@@ -47,6 +57,18 @@ public class FudgeRoll extends AbstractRoll<FudgeConfig>
 		}
 
 		output.append(" = ");
+
+		if (this.sum > 0)
+			output.append("+" + this.sum).with(Style.GREEN).with(Style.BOLD);
+		else if (this.sum < 0)
+			output.append(this.sum).with(Style.RED).with(Style.BOLD);
+		else
+			output.append("0").with(Style.BOLD);
+	}
+
+	private Grouping getGrouping()
+	{
+		return getConfig() != null ? getConfig().getGrouping() : Grouping.EXPAND;
 	}
 
 	public static void appendRoll(final IFormattedBufferedOutput output, final int result) throws OutputException

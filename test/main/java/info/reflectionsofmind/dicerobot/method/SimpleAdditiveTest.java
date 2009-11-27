@@ -38,35 +38,35 @@ public class SimpleAdditiveTest
 	public void shouldRollDice() throws Exception
 	{
 		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "3d6", this.output);
-		assertEquals("10", this.output.getString());
+		assertEquals("10", this.output.getFormatted());
 	}
 
 	@Test
 	public void shouldAllowNumbers() throws Exception
 	{
 		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "5", this.output);
-		assertEquals("5", this.output.getString());
+		assertEquals("5", this.output.getFormatted());
 	}
 
 	@Test
 	public void shouldAdd() throws Exception
 	{
 		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "3d6+3", this.output);
-		assertEquals("10 + 3 = 13", this.output.getString());
+		assertEquals("10 + 3 = 13", this.output.getFormatted());
 	}
 
 	@Test
 	public void shouldSubtract() throws Exception
 	{
 		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "3d6-3", this.output);
-		assertEquals("10 - 3 = 7", this.output.getString());
+		assertEquals("10 - 3 = 7", this.output.getFormatted());
 	}
 
 	@Test
 	public void shouldRollOneDieIfNumberNotSpecified() throws Exception
 	{
 		new AdditiveRoll().writeResult(mockRolls(15), new SumConfig(Grouping.GROUPED), "d20", this.output);
-		assertEquals("15", this.output.getString());
+		assertEquals("15", this.output.getFormatted());
 	}
 
 	@Test

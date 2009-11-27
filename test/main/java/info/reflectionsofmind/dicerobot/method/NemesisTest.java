@@ -21,7 +21,7 @@ public class NemesisTest
 	{
 		final MockOutput output = new MockOutput();
 		new Nemesis().writeResult(mockRolls(2, 4, 5, 2, 4, 4), null, "1+4d+3+2d+4+3td+2", output);
-		assertEquals("<xb>4x4</xb> + <xb>3x2</xb> + <xb>3td</xb> + 5 + 3 + 1", output.getString());
+		assertEquals("<xb>4x4</xb> + <xb>3x2</xb> + <xb>3td</xb> + 5 + 3 + 1", output.getFormatted());
 	}
 	
 	@Test
