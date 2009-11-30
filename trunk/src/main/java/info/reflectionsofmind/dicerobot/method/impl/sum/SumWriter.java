@@ -1,5 +1,7 @@
 package info.reflectionsofmind.dicerobot.method.impl.sum;
 
+import static info.reflectionsofmind.dicerobot.util.StringUtil.MINUS;
+import static info.reflectionsofmind.dicerobot.util.StringUtil.PLUS;
 import static java.lang.Math.abs;
 import info.reflectionsofmind.dicerobot.exception.CannotRenderRollException;
 import info.reflectionsofmind.dicerobot.exception.output.OutputException;
@@ -10,18 +12,15 @@ import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
 public class SumWriter implements IRollWriter<SumResult>
 {
 	private Grouping collapseMode = Grouping.GROUPED;
-	
+
 	@Override
 	public void render(final IFormattedBufferedOutput output, final SumResult result) throws CannotRenderRollException
 	{
-		if (result.getResults().isEmpty())
-		{
-			throw new CannotRenderRollException("no roll results");
-		}
-		
+		if (result.getResults().isEmpty()) { throw new CannotRenderRollException("no roll results"); }
+
 		int sum = 0;
 		int writtenValues = 0;
-		
+
 		try
 		{
 			for (final SumRequest.Token token : result.getRequest().getTokens())
@@ -30,24 +29,24 @@ public class SumWriter implements IRollWriter<SumResult>
 				{
 					if (this.collapseMode != Grouping.RESULT)
 						write(output, writtenValues++, ((SumRequest.Number) token).getNumber());
-					
+
 					sum += ((SumRequest.Number) token).getNumber();
 				}
 				else if (token instanceof SumRequest.Roll)
 				{
 					int groupSum = 0;
-					
+
 					for (final Integer value : result.getResults((SumRequest.Roll) token))
 					{
 						if (this.collapseMode == Grouping.EXPANDED)
 							write(output, writtenValues++, value);
-						
+
 						groupSum += value;
 					}
-					
+
 					if (this.collapseMode == Grouping.GROUPED)
 						write(output, writtenValues++, groupSum);
-					
+
 					sum += groupSum;
 				}
 				else
@@ -55,7 +54,7 @@ public class SumWriter implements IRollWriter<SumResult>
 					throw new CannotRenderRollException("Invalid token " + token);
 				}
 			}
-			
+
 			if (this.collapseMode == Grouping.RESULT)
 			{
 				output.append(sum);
@@ -65,9 +64,9 @@ public class SumWriter implements IRollWriter<SumResult>
 			{
 				output.append(" = ").append(sum);
 			}
-			
+
 			final Integer tn = result.getRequest().getTargetNumber();
-			
+
 			if (tn != null)
 			{
 				final String resolution = sum >= tn ? "success" : "failure";
@@ -80,23 +79,23 @@ public class SumWriter implements IRollWriter<SumResult>
 			throw CannotRenderRollException.wrap(exception);
 		}
 	}
-	
+
 	private void write(final IFormattedBufferedOutput output, final int index, final int number) throws OutputException
 	{
 		if (index > 0)
 		{
-			output.append(number >= 0 ? " + " : " - ").append(abs(number));
+			output.append(" ").append(number >= 0 ? PLUS : MINUS).append(" ").append(abs(number));
 		}
 		else if (index == 0 && number < 0)
 		{
-			output.append("-").append(abs(number));
+			output.append(MINUS).append(abs(number));
 		}
 		else
 		{
 			output.append(number); // index == 0 && number > 0
 		}
 	}
-	
+
 	public SumWriter setCollapseMode(final Grouping collapseMode)
 	{
 		this.collapseMode = collapseMode;

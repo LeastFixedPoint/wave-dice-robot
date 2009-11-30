@@ -59,7 +59,7 @@ public class SimpleAdditiveTest
 	public void shouldSubtract() throws Exception
 	{
 		new AdditiveRoll().writeResult(mockRolls(1, 6, 3), new SumConfig(Grouping.GROUPED), "3d6-3", this.output);
-		assertEquals("10 - 3 = 7", this.output.getFormatted());
+		assertEquals("10 − 3 = 7", this.output.getFormatted());
 	}
 
 	@Test
@@ -114,7 +114,7 @@ public class SimpleAdditiveTest
 				.add((Roll) request.getTokens().get(0), -2, -1, -6)
 				.add((Roll) request.getTokens().get(2), 16);
 
-		assertWrite(new SumWriter(), result, "-9 - 4 + 16 = 3");
+		assertWrite(new SumWriter(), result, "−9 − 4 + 16 = 3");
 	}
 
 	@Test
@@ -126,7 +126,7 @@ public class SimpleAdditiveTest
 				.add((Roll) request.getTokens().get(0), 2, 1, 6)
 				.add((Roll) request.getTokens().get(2), 16);
 
-		assertWrite(new SumWriter(), result, "9 - 4 + 16 = 21");
+		assertWrite(new SumWriter(), result, "9 − 4 + 16 = 21");
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class SimpleAdditiveTest
 
 		final SumWriter writer = new SumWriter().setCollapseMode(Grouping.EXPANDED);
 
-		assertWrite(writer, result, "-2 - 1 - 6 - 4 + 16 = 3");
+		assertWrite(writer, result, "−2 − 1 − 6 − 4 + 16 = 3");
 	}
 
 	@Test

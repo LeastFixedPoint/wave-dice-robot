@@ -121,6 +121,20 @@
 							</ul>
 						</div>
 					</div>
+					<div id="config-fdg">
+						<b>Fudge</b><br/>
+						<br/>
+						<div class="examples">
+							Examples: 
+							<ul>
+								<li>[f] - make standard roll</li>
+								<li>[3dF] - roll 3 fudge dice</li>
+								<li>[5] - roll 5 fudge dice</li>
+								<li>[mediocre] - make roll for mediocre level</li>
+								<li>[superb +3] - make roll for superb+3 level</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 				
 				<script type="text/javascript"> 

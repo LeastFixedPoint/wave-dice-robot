@@ -1,10 +1,9 @@
-package info.reflectionsofmind.dicerobot.method.impl.fudge;
+package info.reflectionsofmind.dicerobot.method.impl;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
 import info.reflectionsofmind.dicerobot.exception.FatalException;
 import info.reflectionsofmind.dicerobot.exception.UserReadableException;
 import info.reflectionsofmind.dicerobot.method.IRollConfig;
-import info.reflectionsofmind.dicerobot.method.impl.AbstractRollingMethod;
 import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
 
 public abstract class AbstractStagedMethod<TConfig extends IRollConfig> extends AbstractRollingMethod
