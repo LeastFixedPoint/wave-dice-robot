@@ -3,8 +3,11 @@
 == Currently working on ==
   * Preventing roll results from being changed by other people.
   * Other systems.
-  * Configuration subpanel for other rolling methods.
-  * Examples for rolling methods in configuration subpanel.
+  * Configuration subpanels for other rolling methods.
+  * Examples for rolling methods in configuration subpanels.
+----
+== 30 November 2009 ==
+  * Implemented [http://en.wikipedia.org/wiki/Fudge_(role-playing_game_system) Fudge].
 ----
 == 18 November 2009 ==
   * Configuration subpanel.
