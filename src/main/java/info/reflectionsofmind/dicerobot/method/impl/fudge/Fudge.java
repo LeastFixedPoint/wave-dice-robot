@@ -1,5 +1,7 @@
 package info.reflectionsofmind.dicerobot.method.impl.fudge;
 
+import info.reflectionsofmind.dicerobot.method.impl.AbstractStagedMethod;
+
 public class Fudge extends AbstractStagedMethod<FudgeConfig>
 {
 	@Override

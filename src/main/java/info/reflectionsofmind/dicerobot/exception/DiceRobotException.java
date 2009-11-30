@@ -6,9 +6,14 @@ public class DiceRobotException extends Exception
 	{
 		super(cause);
 	}
-	
+
 	public DiceRobotException(final String message)
 	{
 		super(message);
+	}
+
+	public DiceRobotException(final String string, final Exception exception)
+	{
+		super(string, exception);
 	}
 }

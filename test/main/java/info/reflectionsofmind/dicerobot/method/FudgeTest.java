@@ -20,7 +20,7 @@ public class FudgeTest
 		final MockOutput output = new MockOutput();
 		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "f", output);
 
-		assertEquals("<b><green>+</green></b> <b><red>-</red></b> <b>0</b> <b><green>+</green></b> = <b><green>+1</green></b>", output.getFormatted());
+		assertEquals("<xb><green>+</green></xb> <xb><red>−</red></xb> <xb>0</xb> <xb><green>+</green></xb> = <xb><green>+1</green></xb>", output.getFormatted());
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class FudgeTest
 		final MockOutput output = new MockOutput();
 		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "f", output);
 
-		assertEquals("<b><green>+</green></b> <b><red>-</red></b> <b>0</b> <b><red>-</red></b> = <b><red>-1</red></b>", output.getFormatted());
+		assertEquals("<xb><green>+</green></xb> <xb><red>−</red></xb> <xb>0</xb> <xb><red>−</red></xb> = <xb><red>−1</red></xb>", output.getFormatted());
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class FudgeTest
 		final MockOutput output = new MockOutput();
 		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "f", output);
 
-		assertEquals("<b><green>+</green></b> <b><red>-</red></b> <b>0</b> <b>0</b> = <b>0</b>", output.getFormatted());
+		assertEquals("<xb><green>+</green></xb> <xb><red>−</red></xb> <xb>0</xb> <xb>0</xb> = <xb>0</xb>", output.getFormatted());
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class FudgeTest
 		final MockOutput output = new MockOutput();
 		new Fudge().writeResult(rolls, null, "5", output);
 
-		assertEquals("<b><green>+</green></b> <b><red>-</red></b> <b>0</b> <b><green>+</green></b> <b><red>-</red></b> = <b>0</b>", output.getFormatted());
+		assertEquals("<xb><green>+</green></xb> <xb><red>−</red></xb> <xb>0</xb> <xb><green>+</green></xb> <xb><red>−</red></xb> = <xb>0</xb>", output.getFormatted());
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class FudgeTest
 		final MockOutput output = new MockOutput();
 		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "5dF", output);
 
-		assertEquals("<b><green>+</green></b> <b><red>-</red></b> <b>0</b> <b><green>+</green></b> <b><red>-</red></b> = <b>0</b>", output.getFormatted());
+		assertEquals("<xb><green>+</green></xb> <xb><red>−</red></xb> <xb>0</xb> <xb><green>+</green></xb> <xb><red>−</red></xb> = <xb>0</xb>", output.getFormatted());
 	}
 
 	@Test(expected = CannotParseRollException.class)
@@ -76,6 +76,46 @@ public class FudgeTest
 	{
 		final IDieRollerFactory rolls = TestingUtil.mockRolls(3, 1, 2, 3, 1, 2);
 		final MockOutput output = new MockOutput();
-		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "-1", output);
+		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "−1", output);
+	}
+
+	@Test
+	public void shouldRollAdjectivesLargerThanRequest() throws Exception
+	{
+		final IDieRollerFactory rolls = TestingUtil.mockRolls(3, 1, 2, 3, 1, 2);
+		final MockOutput output = new MockOutput();
+		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "fair", output);
+
+		assertEquals("<xb><green>+</green></xb> <xb><red>−</red></xb> <xb>0</xb> <xb><green>+</green></xb> = <xb><green>good</green></xb>", output.getFormatted());
+	}
+
+	@Test
+	public void shouldRollAdjectivesSameAsRequest() throws Exception
+	{
+		final IDieRollerFactory rolls = TestingUtil.mockRolls(3, 1, 2, 2, 1, 2);
+		final MockOutput output = new MockOutput();
+		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "fair", output);
+
+		assertEquals("<xb><green>+</green></xb> <xb><red>−</red></xb> <xb>0</xb> <xb>0</xb> = <xb>fair</xb>", output.getFormatted());
+	}
+
+	@Test
+	public void shouldRollAdjectivesLesserThanRequest() throws Exception
+	{
+		final IDieRollerFactory rolls = TestingUtil.mockRolls(3, 1, 2, 1, 1, 2);
+		final MockOutput output = new MockOutput();
+		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.EXPAND), "fair", output);
+
+		assertEquals("<xb><green>+</green></xb> <xb><red>−</red></xb> <xb>0</xb> <xb><red>−</red></xb> = <xb><red>mediocre</red></xb>", output.getFormatted());
+	}
+
+	@Test
+	public void shouldWriteResultOnly() throws Exception
+	{
+		final IDieRollerFactory rolls = TestingUtil.mockRolls(3, 1, 2, 1, 1, 2);
+		final MockOutput output = new MockOutput();
+		new Fudge().writeResult(rolls, new FudgeConfig(Grouping.RESULT), "fair", output);
+
+		assertEquals("<xb><red>mediocre</red></xb>", output.getFormatted());
 	}
 }

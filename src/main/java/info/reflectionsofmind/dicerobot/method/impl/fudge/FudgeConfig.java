@@ -6,7 +6,7 @@ public class FudgeConfig implements IRollConfig
 {
 	public enum Grouping
 	{
-		EXPAND, GROUP, RESULT
+		EXPAND, RESULT
 	}
 
 	private final Grouping grouping;

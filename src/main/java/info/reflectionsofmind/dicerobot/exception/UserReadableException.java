@@ -6,4 +6,9 @@ public abstract class UserReadableException extends DiceRobotException
 	{
 		super(string);
 	}
+
+	public UserReadableException(final String string, final Exception exception)
+	{
+		super(string, exception);
+	}
 }

@@ -1,4 +1,4 @@
-package info.reflectionsofmind.dicerobot.method.impl.fudge;
+package info.reflectionsofmind.dicerobot.method.impl;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
 import info.reflectionsofmind.dicerobot.exception.FatalException;

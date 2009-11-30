@@ -6,4 +6,9 @@ public class CannotParseRollException extends UserReadableException
 	{
 		super(string);
 	}
+
+	public CannotParseRollException(final String string, final Exception exception)
+	{
+		super(string, exception);
+	}
 }

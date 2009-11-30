@@ -1,4 +1,4 @@
-package info.reflectionsofmind.dicerobot.method.impl.fudge;
+package info.reflectionsofmind.dicerobot.method.impl;
 
 import info.reflectionsofmind.dicerobot.diceroller.IDieRollerFactory;
 import info.reflectionsofmind.dicerobot.exception.CannotMakeRollException;
@@ -29,7 +29,7 @@ public abstract class AbstractRoll<TConfig extends IRollConfig> implements IRoll
 		}
 		catch (final NumberFormatException exception)
 		{
-			throw new CannotParseRollException("invalid number");
+			throw new CannotParseRollException("invalid number", exception);
 		}
 
 		roll(factory);
