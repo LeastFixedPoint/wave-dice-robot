@@ -1,15 +1,12 @@
-/**
- * 
- */
 package info.reflectionsofmind.dicerobot.method.impl.fudge.scale;
 
 import static info.reflectionsofmind.dicerobot.util.StringUtil.MINUS;
 
-public class TerribleScale implements IScale
+public class AbysmalScale implements IScale
 {
 	private final int rate;
 
-	public TerribleScale(final int rate)
+	public AbysmalScale(final int rate)
 	{
 		this.rate = rate;
 	}
@@ -17,18 +14,18 @@ public class TerribleScale implements IScale
 	@Override
 	public IScale adjust(final int adjustment)
 	{
-		return Scale.TERRIBLE.adjust(adjustment - this.rate);
+		return Scale.ABYSMAL.adjust(adjustment - this.rate);
 	}
 
 	@Override
 	public String getAdjective()
 	{
-		return Scale.TERRIBLE.getAdjective() + " " + MINUS + this.rate;
+		return Scale.ABYSMAL.getAdjective() + " " + MINUS + this.rate;
 	}
 
 	@Override
 	public boolean equals(final Object obj)
 	{
-		return obj instanceof TerribleScale && ((TerribleScale) obj).rate == this.rate;
+		return obj instanceof AbysmalScale && ((AbysmalScale) obj).rate == this.rate;
 	}
 }
