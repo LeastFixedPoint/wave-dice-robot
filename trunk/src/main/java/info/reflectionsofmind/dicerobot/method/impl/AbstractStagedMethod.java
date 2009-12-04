@@ -8,11 +8,11 @@ import info.reflectionsofmind.dicerobot.output.IFormattedBufferedOutput;
 
 public abstract class AbstractStagedMethod<TConfig extends IRollConfig> extends AbstractRollingMethod
 {
-	public abstract IRollInstance createRoll();
+	public abstract IRollInstance<TConfig> createRoll();
 
 	@Override
 	public final void writeResult(final IDieRollerFactory factory, final IRollConfig config, final String input, final IFormattedBufferedOutput output) throws UserReadableException, FatalException
 	{
-		createRoll().execute(config, input, factory, output);
+		createRoll().execute((TConfig) config, input, factory, output);
 	}
 }

@@ -5,7 +5,9 @@ import static java.lang.Math.max;
 
 public enum Scale implements IScale
 {
-	TERRIBLE("terrible"), POOR("poor"), MEDIOCRE("mediocre"), FAIR("fair"), GOOD("good"), GREAT("great"), SUPERB("superb");
+	ABYSMAL("abysmal"), TERRIBLE("terrible"), POOR("poor"), MEDIOCRE("mediocre"), // 
+	FAIR("fair"), GOOD("good"), GREAT("great"), SUPERB("superb"), //
+	FANTASTIC("fantastic"), EPIC("epic"), LEGENDARY("legendary");
 
 	private final String adjective;
 
@@ -24,9 +26,9 @@ public enum Scale implements IScale
 		final int newIndex = this.ordinal() + adjustment;
 
 		if (newIndex >= Scale.values().length)
-			return new SuperbScale(newIndex - values().length + 1);
+			return new LegendaryScale(newIndex - values().length + 1);
 		else if (newIndex < 0)
-			return new TerribleScale(abs(newIndex));
+			return new AbysmalScale(abs(newIndex));
 		else
 			return values()[newIndex];
 	}
@@ -36,8 +38,7 @@ public enum Scale implements IScale
 		final String adjWithoutSpaces = adjective.replaceAll("\\s", "").toLowerCase();
 
 		for (final Scale scale : values())
-			if (scale.getAdjective().equals(adjWithoutSpaces))
-				return scale;
+			if (scale.getAdjective().equals(adjWithoutSpaces)) return scale;
 
 		final int sep = max(adjWithoutSpaces.indexOf("+"), adjWithoutSpaces.indexOf("-"));
 

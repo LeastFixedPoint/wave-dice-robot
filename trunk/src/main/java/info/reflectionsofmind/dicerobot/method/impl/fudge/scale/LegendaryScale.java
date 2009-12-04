@@ -2,11 +2,11 @@ package info.reflectionsofmind.dicerobot.method.impl.fudge.scale;
 
 import static info.reflectionsofmind.dicerobot.util.StringUtil.PLUS;
 
-public class SuperbScale implements IScale
+public class LegendaryScale implements IScale
 {
 	private final int rate;
 
-	public SuperbScale(final int rate)
+	public LegendaryScale(final int rate)
 	{
 		this.rate = rate;
 	}
@@ -14,18 +14,18 @@ public class SuperbScale implements IScale
 	@Override
 	public IScale adjust(final int adjustment)
 	{
-		return Scale.SUPERB.adjust(adjustment + this.rate);
+		return Scale.LEGENDARY.adjust(adjustment + this.rate);
 	}
 
 	@Override
 	public String getAdjective()
 	{
-		return Scale.SUPERB.getAdjective() + " " + PLUS + this.rate;
+		return Scale.LEGENDARY.getAdjective() + " " + PLUS + this.rate;
 	}
 
 	@Override
 	public boolean equals(final Object obj)
 	{
-		return obj instanceof SuperbScale && ((SuperbScale) obj).rate == this.rate;
+		return obj instanceof LegendaryScale && ((LegendaryScale) obj).rate == this.rate;
 	}
 }
