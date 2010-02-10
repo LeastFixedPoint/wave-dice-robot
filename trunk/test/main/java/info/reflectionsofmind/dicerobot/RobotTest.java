@@ -1,6 +1,5 @@
 package info.reflectionsofmind.dicerobot;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -20,18 +19,16 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class RobotTest
-{
-	private static void assertRequest(final String config, final String input, final int start, final IWritableText textMock, final RollRequest request)
-	{
+public class RobotTest {
+	private static void assertRequest(final String config, final String input, final int start,
+			final IWritableText textMock, final RollRequest request) {
 		assertEquals(config, request.getMethodCode());
 		assertEquals(input, request.getRequest());
 		verify(textMock).createOutput(eq(start));
 	}
 
 	@Test
-	public void shouldExtractQualifiedRequests()
-	{
+	public void shouldExtractQualifiedRequests() {
 		final DiceRobot robot = new DiceRobot(null);
 
 		final IWritableText text = mock(IWritableText.class);
@@ -44,8 +41,7 @@ public class RobotTest
 	}
 
 	@Test
-	public void shouldExtractNonQualifiedRequests()
-	{
+	public void shouldExtractNonQualifiedRequests() {
 		final DiceRobot robot = new DiceRobot(null);
 
 		final IWritableText text = mock(IWritableText.class);
@@ -58,8 +54,7 @@ public class RobotTest
 	}
 
 	@Test
-	public void shouldNotExtractEvaluatedRequests()
-	{
+	public void shouldNotExtractEvaluatedRequests() {
 		final DiceRobot robot = new DiceRobot(null);
 
 		final IWritableText text = mock(IWritableText.class);
@@ -71,8 +66,7 @@ public class RobotTest
 	}
 
 	@Test
-	public void shouldCreateLimitedFactoryIfRollLimitIsSet() throws Exception
-	{
+	public void shouldCreateLimitedFactoryIfRollLimitIsSet() throws Exception {
 		final DiceRobot robot = new DiceRobot(null);
 		robot.setMaxNumberOfRolls(10);
 
@@ -80,31 +74,27 @@ public class RobotTest
 	}
 
 	@Test
-	public void shouldCreateUnlimitedFactoryIfRollLimitIsNotSet() throws Exception
-	{
+	public void shouldCreateUnlimitedFactoryIfRollLimitIsNotSet() throws Exception {
 		final DiceRobot robot = new DiceRobot(null);
 		assertEquals(RandomBasedDieRollerFactory.class, robot.createDieRollerFactory().getClass());
 	}
 
 	@Test
-	public void shouldWrapOutputInLimitedWrapperIfWriteLimitIsSet() throws Exception
-	{
+	public void shouldWrapOutputInLimitedWrapperIfWriteLimitIsSet() throws Exception {
 		final DiceRobot robot = new DiceRobot(null);
 		robot.setMaxResultLength(10);
 		assertEquals(LimitingWriter.class, robot.wrapOutput(mock(RollRequest.class)).getClass());
 	}
 
 	@Test
-	public void shouldTakeMethodCodeFromRequestIfAvailable()
-	{
+	public void shouldTakeMethodCodeFromRequestIfAvailable() {
 		final DiceRobot robot = new DiceRobot(null);
 		final String code = robot.resolveMethodCode(new RollRequest(null, "sum", null), null);
 		assertEquals("sum", code);
 	}
 
 	@Test
-	public void shouldTakeMethodCodeFromContextIfNotSuppliedInRequest()
-	{
+	public void shouldTakeMethodCodeFromContextIfNotSuppliedInRequest() {
 		final DiceRobot robot = new DiceRobot(null);
 		final IRequestContext context = mock(IRequestContext.class);
 		when(context.getDefaultMethodCode()).thenReturn("sum");
@@ -113,8 +103,7 @@ public class RobotTest
 	}
 
 	@Test
-	public void shouldComplainOnRequestsTooLong() throws Exception
-	{
+	public void shouldComplainOnRequestsTooLong() throws Exception {
 		final DiceRobot robot = new DiceRobot(null).setMaxRequestLength(10);
 		final MockOutput output = new MockOutput();
 		final RollRequest request = new RollRequest(output, "sum", "12345678901");
@@ -123,8 +112,7 @@ public class RobotTest
 	}
 
 	@Test
-	public void shouldComplainOnTooLongOutput() throws Exception
-	{
+	public void shouldComplainOnTooLongOutput() throws Exception {
 		final DiceRobot robot = new DiceRobot(new DefaultMethodFactory()).setMaxResultLength(2);
 		final MockOutput output = new MockOutput();
 		final RollRequest request = new RollRequest(output, "sum", "d6+d6");
@@ -133,8 +121,7 @@ public class RobotTest
 	}
 
 	@Test
-	public void shouldComplainOnTooManyRolls() throws Exception
-	{
+	public void shouldComplainOnTooManyRolls() throws Exception {
 		final DiceRobot robot = new DiceRobot(new DefaultMethodFactory()).setMaxNumberOfRolls(10);
 		final MockOutput output = new MockOutput();
 		final RollRequest request = new RollRequest(output, "sum", "11d6");
@@ -145,7 +132,6 @@ public class RobotTest
 	}
 
 	@Test
-	public void sandbox() throws Exception
-	{
+	public void sandbox() throws Exception {
 	}
 }
